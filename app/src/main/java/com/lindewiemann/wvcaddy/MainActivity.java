@@ -6,6 +6,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import androidx.navigation.NavController;
@@ -17,6 +18,14 @@ import com.lindewiemann.wvcaddy.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,61 +36,66 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //loadInit();
+        loadInit();
     }
 
-
-    /*private void loadInit() {
-
-        getSupportActionBar().hide();
-
-    }*/
-
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    private void loadInit() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
+        List<ImageButton> btns = find(root, ImageButton.class);
 
 
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        for (int i=0; i<btns.size(); i++) {
+            //if(btns.get(i).getTag() != null) {
+                android.view.ViewGroup.LayoutParams params = btns.get(i).getLayoutParams();
+                params.height = displayMetrics.heightPixels / 4;
+                params.width = displayMetrics.widthPixels / 5 ;
 
-
-
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+                btns.get(i).setLayoutParams(params);
+            //}
+        }
     }
 
+    public void removeClick(View view) {
+        ImageButton btn = (ImageButton)view;
+        int btnId = btn.getId();
+        String strTag = btn.getTag().toString();
 
+        hideParts();
+    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public static <T extends View> List<T> find(ViewGroup root, Class<T> type) {
+        FinderByType<T> finderByType = new FinderByType<T>(type);
+        LayoutTraverser.build(finderByType).traverse(root);
+        return finderByType.getViews();
+    }
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    private void hideParts() {
+        ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
+        List<LinearLayout> lls = find(root, LinearLayout.class);
+    }
+
+    private static class FinderByType<T extends View> implements LayoutTraverser.Processor {
+        private final Class<T> type;
+        private final List<T> views;
+
+        private FinderByType(Class<T> type) {
+            this.type = type;
+            views = new ArrayList<T>();
         }
 
-        return super.onOptionsItemSelected(item);
-    }
+        @Override
+        @SuppressWarnings("unchecked")
+        public void process(View view) {
+            if (type.isInstance(view)) {
+                views.add((T) view);
+            }
+        }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }*/
+        public List<T> getViews() {
+            return views;
+        }
+    }
 }

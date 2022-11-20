@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:layout_editor_absoluteY="1dp">
 
-    <LinearLayout
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/black"
@@ -127,100 +127,245 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-
-
-            <LinearLayout
+        <LinearLayout
                 android:layout_width="match_parent"
-
                 android:orientation="vertical"
                 android:layout_height="0dp"
+                android:layout_weight="1">
 
-                android:layout_weight="1"
-                >
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <ScrollView
+                <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <HorizontalScrollView
+                    <GridLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-                <GridLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                        android:layout_height="match_parent"
+                        android:columnCount="4"
+                        android:rowCount="2"
+                        android:layout_gravity="center">
 
-                    android:columnCount="4"
-                    android:rowCount="2">
+                        <LinearLayout
+                            android:layout_row="0"
+                            android:layout_column="0"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border"
+                            android:orientation="vertical"
+                            android:tag="uzsb1l"
+                            >
 
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginRight="2dp"
+                                android:background="@color/left"
+                                android:paddingLeft="5dp"
+                                android:text="UZSB 1" />
 
-
-                    <LinearLayout
-                        android:layout_row="0"
-                        android:layout_column="0"
-                        android:orientation="vertical"
-                        android:background="@drawable/border">
-
-                        <TextView
+                        <LinearLayout
+                            android:layout_height="0dp"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:text="asasd"
-                            android:background="@color/yellow"/>
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+                            <ImageButton
+                                android:layout_height="match_parent"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:padding="10dp"
+                                android:src="@drawable/uzsb1l"
+                                android:tag="uzsb1l"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitCenter"
+                                android:onClick="removeClick"/>
+                        </LinearLayout>
+                        </LinearLayout>
 
-                        <ImageButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/uzsb1l" />
+                        <LinearLayout
+                            android:layout_row="0"
+                            android:layout_column="1"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border"
+                            android:orientation="vertical">
 
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginRight="2dp"
+                                android:background="@color/left"
+                                android:paddingLeft="5dp"
+                                android:text="UZSB 2" />
 
+                            <ImageButton
+                                android:layout_height="match_parent"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:padding="10dp"
+                                android:src="@drawable/uzsb2l"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitCenter"/>
 
-                    <ImageButton
-                        android:layout_row="0"
-                        android:layout_column="1"
-                        android:src="@drawable/uzsb2l" />
+                        </LinearLayout>
 
-                    <ImageButton
-                        android:layout_row="0"
-                        android:layout_column="2"
-                        android:src="@drawable/uzsb3l" />
+                        <LinearLayout
+                            android:layout_row="0"
+                            android:layout_column="2"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border"
+                            android:orientation="vertical">
 
-                    <ImageButton
-                        android:layout_row="0"
-                        android:layout_column="3"
-                        android:src="@drawable/uzsb4l" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginRight="2dp"
+                                android:background="@color/left"
+                                android:paddingLeft="5dp"
+                                android:text="UZSB 3" />
 
+                            <ImageButton
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:padding="20dp"
+                                android:src="@drawable/uzsb3l" />
 
-                    <LinearLayout
-                        android:layout_row="1"
-                        android:layout_column="0">
+                        </LinearLayout>
 
-                        <ImageButton
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/uzsb1r" />
+                        <LinearLayout
+                            android:layout_row="0"
+                            android:layout_column="3"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border"
+                            android:orientation="vertical">
 
-                    </LinearLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginRight="2dp"
+                                android:background="@color/left"
+                                android:paddingLeft="5dp"
+                                android:text="UZSB 4" />
 
-                    <ImageButton
-                        android:layout_row="1"
-                        android:layout_column="1"
-                        android:src="@drawable/uzsb2r" />
+                            <ImageButton
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:padding="20dp"
+                                android:src="@drawable/uzsb4l" />
+                        </LinearLayout>
 
-                    <ImageButton
-                        android:layout_row="1"
-                        android:layout_column="2"
-                        android:src="@drawable/uzsb3r" />
+                        <LinearLayout
+                            android:layout_row="1"
+                            android:layout_column="0"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border"
+                            android:orientation="vertical">
 
-                    <ImageButton
-                        android:layout_row="1"
-                        android:layout_column="3"
-                        android:src="@drawable/uzsb4r" />
-                </GridLayout>
-                    </HorizontalScrollView>
-                </ScrollView>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginRight="2dp"
+                                android:background="@color/right"
+                                android:paddingLeft="5dp"
+                                android:text="UZSB 1" />
 
-            </LinearLayout>
+                            <ImageButton
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:padding="20dp"
+                                android:src="@drawable/uzsb1r" />
 
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_row="1"
+                            android:layout_column="1"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginRight="2dp"
+                                android:background="@color/right"
+                                android:paddingLeft="5dp"
+                                android:text="UZSB 2" />
+
+                            <ImageButton
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:padding="20dp"
+                                android:src="@drawable/uzsb2r" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_row="1"
+                            android:layout_column="2"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginRight="2dp"
+                                android:background="@color/right"
+                                android:paddingLeft="5dp"
+                                android:text="UZSB 3" />
+
+                            <ImageButton
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:padding="20dp"
+                                android:src="@drawable/uzsb3r" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_row="1"
+                            android:layout_column="3"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/border"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="2dp"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginRight="2dp"
+                                android:background="@color/right"
+                                android:paddingLeft="5dp"
+                                android:text="UZSB 4" />
+
+                            <ImageButton
+                                android:layout_width="200dp"
+                                android:layout_height="wrap_content"
+                                android:padding="20dp"
+                                android:src="@drawable/uzsb4r" />
+
+                        </LinearLayout>
+                    </GridLayout>
+                </HorizontalScrollView>
+            </ScrollView>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/llBottom"
@@ -230,7 +375,6 @@
             android:background="#ddd"
             android:gravity="bottom|center"
             android:orientation="vertical">
-
 
             <Button
                 android:id="@+id/btnSave"
@@ -243,11 +387,8 @@
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
-
         </LinearLayout>
 
     </LinearLayout>
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
