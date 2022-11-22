@@ -36,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //loadInit();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
         loadInit();
     }
 
@@ -44,12 +50,22 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
         List<ImageButton> btns = find(root, ImageButton.class);
+        Button btnSave = (Button) findViewById(R.id.btnSave);
+        //android.view.ViewGroup.LayoutParams btnSaveParams = btnSave.getLayoutParams();
+        int iScreenHeighDelta = btnSave.getHeight();
+
+        int iHeight = (displayMetrics.heightPixels - (3 * iScreenHeighDelta) - 150) / 2;
+        if(iHeight < 200) iHeight = 200;
+        if(iHeight > 800) iHeight = 800;
+        int iWidth = displayMetrics.widthPixels / 5 ;
+        if(iWidth < 150) iWidth = 150;
+        if(iWidth > 600) iWidth = 600;
 
         for (int i=0; i<btns.size(); i++) {
             //if(btns.get(i).getTag() != null) {
                 android.view.ViewGroup.LayoutParams params = btns.get(i).getLayoutParams();
-                params.height = displayMetrics.heightPixels / 4;
-                params.width = displayMetrics.widthPixels / 5 ;
+                params.height = iHeight;
+                params.width = iWidth;
 
                 btns.get(i).setLayoutParams(params);
             //}
