@@ -154,8 +154,7 @@
                             android:layout_margin="5dp"
                             android:background="@drawable/border"
                             android:orientation="vertical"
-                            android:tag="uzsb1l"
-                            >
+                            android:tag="uzsb1l">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -167,22 +166,18 @@
                                 android:paddingLeft="5dp"
                                 android:text="UZSB 1" />
 
-                        <LinearLayout
-                            android:layout_height="0dp"
-                            android:layout_width="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="horizontal">
-                            <ImageButton
-                                android:layout_height="match_parent"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:padding="10dp"
-                                android:src="@drawable/uzsb1l"
-                                android:tag="uzsb1l"
-                                android:adjustViewBounds="true"
-                                android:scaleType="fitCenter"
-                                android:onClick="removeClick"/>
-                        </LinearLayout>
+
+                                <ImageButton
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:padding="10dp"
+                                    android:src="@drawable/uzsb1l"
+                                    android:tag="uzsb1l"
+                                    android:adjustViewBounds="true"
+                                    android:scaleType="fitCenter"
+                                    android:onClick="removeClick"/>
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -190,7 +185,8 @@
                             android:layout_column="1"
                             android:layout_margin="5dp"
                             android:background="@drawable/border"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:tag="uzsb2l">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -202,6 +198,11 @@
                                 android:paddingLeft="5dp"
                                 android:text="UZSB 2" />
 
+                            <LinearLayout
+                            android:layout_height="0dp"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
                             <ImageButton
                                 android:layout_height="match_parent"
                                 android:layout_width="0dp"
@@ -210,7 +211,7 @@
                                 android:src="@drawable/uzsb2l"
                                 android:adjustViewBounds="true"
                                 android:scaleType="fitCenter"/>
-
+                            </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
@@ -218,7 +219,8 @@
                             android:layout_column="2"
                             android:layout_margin="5dp"
                             android:background="@drawable/border"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:tag="uzsb3l">
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -230,11 +232,16 @@
                                 android:paddingLeft="5dp"
                                 android:text="UZSB 3" />
 
-                            <ImageButton
-                                android:layout_width="200dp"
-                                android:layout_height="wrap_content"
-                                android:padding="20dp"
-                                android:src="@drawable/uzsb3l" />
+
+                                <ImageButton
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:padding="10dp"
+                                    android:src="@drawable/uzsb3l"
+                                    android:adjustViewBounds="true"
+                                    android:scaleType="fitCenter"
+                                    android:onClick="removeClick"/>
 
                         </LinearLayout>
 
@@ -255,11 +262,16 @@
                                 android:paddingLeft="5dp"
                                 android:text="UZSB 4" />
 
-                            <ImageButton
-                                android:layout_width="200dp"
-                                android:layout_height="wrap_content"
-                                android:padding="20dp"
-                                android:src="@drawable/uzsb4l" />
+                                <ImageButton
+                                    android:layout_height="match_parent"
+                                    android:layout_width="0dp"
+                                    android:layout_weight="1"
+                                    android:padding="10dp"
+                                    android:src="@drawable/uzsb4l"
+                                    android:adjustViewBounds="true"
+                                    android:scaleType="fitCenter"
+                                    android:onClick="removeClick"/>
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -280,10 +292,14 @@
                                 android:text="UZSB 1" />
 
                             <ImageButton
-                                android:layout_width="200dp"
-                                android:layout_height="wrap_content"
-                                android:padding="20dp"
-                                android:src="@drawable/uzsb1r" />
+                                android:layout_height="match_parent"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:padding="10dp"
+                                android:src="@drawable/uzsb1r"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitCenter"
+                                android:onClick="removeClick"/>
 
                         </LinearLayout>
 
@@ -305,10 +321,14 @@
                                 android:text="UZSB 2" />
 
                             <ImageButton
-                                android:layout_width="200dp"
-                                android:layout_height="wrap_content"
-                                android:padding="20dp"
-                                android:src="@drawable/uzsb2r" />
+                                android:layout_height="match_parent"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:padding="10dp"
+                                android:src="@drawable/uzsb2r"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitCenter"
+                                android:onClick="removeClick" />
 
                         </LinearLayout>
 
@@ -330,10 +350,14 @@
                                 android:text="UZSB 3" />
 
                             <ImageButton
-                                android:layout_width="200dp"
-                                android:layout_height="wrap_content"
-                                android:padding="20dp"
-                                android:src="@drawable/uzsb3r" />
+                                android:layout_height="match_parent"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:padding="10dp"
+                                android:src="@drawable/uzsb3r"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitCenter"
+                                android:onClick="removeClick" />
 
                         </LinearLayout>
 
@@ -355,10 +379,14 @@
                                 android:text="UZSB 4" />
 
                             <ImageButton
-                                android:layout_width="200dp"
-                                android:layout_height="wrap_content"
-                                android:padding="20dp"
-                                android:src="@drawable/uzsb4r" />
+                                android:layout_height="match_parent"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:padding="10dp"
+                                android:src="@drawable/uzsb4r"
+                                android:adjustViewBounds="true"
+                                android:scaleType="fitCenter"
+                                android:onClick="removeClick"/>
 
                         </LinearLayout>
                     </GridLayout>

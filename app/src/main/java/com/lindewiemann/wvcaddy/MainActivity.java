@@ -45,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
         ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
         List<ImageButton> btns = find(root, ImageButton.class);
 
-
-
         for (int i=0; i<btns.size(); i++) {
             //if(btns.get(i).getTag() != null) {
                 android.view.ViewGroup.LayoutParams params = btns.get(i).getLayoutParams();
