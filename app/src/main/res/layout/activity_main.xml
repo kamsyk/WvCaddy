@@ -90,7 +90,8 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:onClick="shiftClick"/>
 
             <Button
                 android:id="@+id/btnMorning"
@@ -107,7 +108,8 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:onClick="shiftClick"/>
 
             <Button
                 android:id="@+id/btnAfternoon"
@@ -124,7 +126,8 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:ellipsize="end"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:onClick="shiftClick"/>
         </LinearLayout>
 
         <LinearLayout
@@ -149,6 +152,7 @@
                         android:layout_gravity="center">
 
                         <LinearLayout
+                            android:id="@+id/llUzsb1l"
                             android:layout_row="0"
                             android:layout_column="0"
                             android:layout_margin="5dp"
@@ -168,6 +172,7 @@
 
 
                                 <ImageButton
+                                    android:id="@+id/btnUzsb1l"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
@@ -181,6 +186,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/llUzsb2l"
                             android:layout_row="0"
                             android:layout_column="1"
                             android:layout_margin="5dp"
@@ -204,17 +210,20 @@
                             android:layout_weight="1"
                             android:orientation="horizontal">
                             <ImageButton
+                                android:id="@+id/btnUzsb2l"
                                 android:layout_height="match_parent"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:padding="10dp"
                                 android:src="@drawable/uzsb2l"
                                 android:adjustViewBounds="true"
-                                android:scaleType="fitCenter"/>
+                                android:scaleType="fitCenter"
+                                android:onClick="removeClick"/>
                             </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/llUzsb3l"
                             android:layout_row="0"
                             android:layout_column="2"
                             android:layout_margin="5dp"
@@ -234,6 +243,7 @@
 
 
                                 <ImageButton
+                                    android:id="@+id/btnUzsb3l"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
@@ -246,6 +256,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/llUzsb4l"
                             android:layout_row="0"
                             android:layout_column="3"
                             android:layout_margin="5dp"
@@ -263,6 +274,7 @@
                                 android:text="UZSB 4" />
 
                                 <ImageButton
+                                    android:id="@+id/btnUzsb4l"
                                     android:layout_height="match_parent"
                                     android:layout_width="0dp"
                                     android:layout_weight="1"
@@ -275,6 +287,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/llUzsb1r"
                             android:layout_row="1"
                             android:layout_column="0"
                             android:layout_margin="5dp"
@@ -292,6 +305,7 @@
                                 android:text="UZSB 1" />
 
                             <ImageButton
+                                android:id="@+id/btnUzsb1r"
                                 android:layout_height="match_parent"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
@@ -304,6 +318,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/llUzsb2r"
                             android:layout_row="1"
                             android:layout_column="1"
                             android:layout_margin="5dp"
@@ -321,6 +336,7 @@
                                 android:text="UZSB 2" />
 
                             <ImageButton
+                                android:id="@+id/btnUzsb2r"
                                 android:layout_height="match_parent"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
@@ -333,6 +349,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/llUzsb3r"
                             android:layout_row="1"
                             android:layout_column="2"
                             android:layout_margin="5dp"
@@ -350,6 +367,7 @@
                                 android:text="UZSB 3" />
 
                             <ImageButton
+                                android:id="@+id/btnUzsb3r"
                                 android:layout_height="match_parent"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
@@ -362,6 +380,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/llUzsb4r"
                             android:layout_row="1"
                             android:layout_column="3"
                             android:layout_margin="5dp"
@@ -379,6 +398,7 @@
                                 android:text="UZSB 4" />
 
                             <ImageButton
+                                android:id="@+id/btnUzsb4r"
                                 android:layout_height="match_parent"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
@@ -413,7 +433,8 @@
                 android:minHeight="65dp"
                 android:text="Uložit"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:onClick="save"/>
 
         </LinearLayout>
 
