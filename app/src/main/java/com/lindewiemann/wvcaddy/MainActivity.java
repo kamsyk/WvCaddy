@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void save(View view) {
         displayShiftButtons();
+        displayImages();
     }
 
     private void displayShiftButtons() {
@@ -116,6 +117,28 @@ public class MainActivity extends AppCompatActivity {
         btnNight.setVisibility(View.VISIBLE);
         btnAfternoon.setVisibility(View.VISIBLE);
         btnMorning.setVisibility(View.VISIBLE);
+    }
+
+    private void displayImages() {
+        loadInit();
+
+        LinearLayout llUzsb1l = (LinearLayout) findViewById(R.id.llUzsb1l);
+        LinearLayout llUzsb2l = (LinearLayout) findViewById(R.id.llUzsb2l);
+        LinearLayout llUzsb3l = (LinearLayout) findViewById(R.id.llUzsb3l);
+        LinearLayout llUzsb4l = (LinearLayout) findViewById(R.id.llUzsb4l);
+        LinearLayout llUzsb1r = (LinearLayout) findViewById(R.id.llUzsb1r);
+        LinearLayout llUzsb2r = (LinearLayout) findViewById(R.id.llUzsb2r);
+        LinearLayout llUzsb3r = (LinearLayout) findViewById(R.id.llUzsb3r);
+        LinearLayout llUzsb4r = (LinearLayout) findViewById(R.id.llUzsb4r);
+
+        llUzsb1l.setVisibility(View.VISIBLE);
+        llUzsb2l.setVisibility(View.VISIBLE);
+        llUzsb3l.setVisibility(View.VISIBLE);
+        llUzsb4l.setVisibility(View.VISIBLE);
+        llUzsb1r.setVisibility(View.VISIBLE);
+        llUzsb2r.setVisibility(View.VISIBLE);
+        llUzsb3r.setVisibility(View.VISIBLE);
+        llUzsb4r.setVisibility(View.VISIBLE);
     }
 
     public static <T extends View> List<T> find(ViewGroup root, Class<T> type) {
@@ -132,10 +155,10 @@ public class MainActivity extends AppCompatActivity {
         int iHeight = (displayMetrics.heightPixels - iScreenHeighDelta - 150) / 1;
 
         if(iHeight < 200) iHeight = 200;
-        if(iHeight > 1000) iHeight = 1000;
-        int iWidth = displayMetrics.widthPixels / 2 ;
+        if(iHeight > 1200) iHeight = 1200;
+        int iWidth = displayMetrics.widthPixels - 150 ;
         if(iWidth < 150) iWidth = 150;
-        if(iWidth > 800) iWidth = 800;
+        if(iWidth > 900) iWidth = 900;
 
         LinearLayout llUzsb1l = (LinearLayout) findViewById(R.id.llUzsb1l);
         LinearLayout llUzsb2l = (LinearLayout) findViewById(R.id.llUzsb2l);
