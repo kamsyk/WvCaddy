@@ -1,5 +1,7 @@
 package com.lindewiemann.wvcaddy;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -24,13 +26,20 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    ContainerDbHelper dbHelper = new ContainerDbHelper(this);
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+
+    private int iShift = 0;
+    private String strCode = null;
+    private String strSubcode = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,22 +100,49 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btnAfternoon:
                 btnMorning.setVisibility(View.GONE);
                 btnNight.setVisibility(View.GONE);
+                iShift = LwWvCaddyDbDict.SHIFT_AFTERNOON;
                 break;
             case R.id.btnNight:
                 btnMorning.setVisibility(View.GONE);
                 btnAfternoon.setVisibility(View.GONE);
+                iShift = LwWvCaddyDbDict.SHIFT_NIGHT;
                 break;
             case R.id.btnMorning:
                 btnNight.setVisibility(View.GONE);
                 btnAfternoon.setVisibility(View.GONE);
+                iShift = LwWvCaddyDbDict.SHIFT_MORNING;
                 break;
         }
-
     }
 
     public void save(View view) {
+        saveToDb();
         displayShiftButtons();
         displayImages();
+        iShift = 0;
+        strCode = null;
+        strSubcode = null;
+    }
+
+    private long saveToDb() {
+        Date date = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        String strDate = dateFormat.format(date);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Create a new map of values, where column names are the keys
+        ContentValues values = new ContentValues();
+        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SHIFT, iShift);
+        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE, strCode);
+        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE, strSubcode);
+        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS, 1);
+        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE, strDate);
+
+        // Insert the new row, returning the primary key value of the new row
+        long newRowId = db.insert(LwWvCaddyDbDict.WvCaddyEntry.TABLE_NAME, null, values);
+
+        return newRowId;
     }
 
     private void displayShiftButtons() {
@@ -189,27 +225,36 @@ public class MainActivity extends AppCompatActivity {
 
         switch(btnId) {
             case R.id.btnUzsb1l:
+                strCode = "UZSB 1";
+                strSubcode = "810 2-4525;020 2-4529";
                 hideLls(R.id.llUzsb1l, lls);
                 break;
             case R.id.btnUzsb2l:
+                strCode = "UZSB 2";
                 hideLls(R.id.llUzsb2l, lls);
                 break;
             case R.id.btnUzsb3l:
+                strCode = "UZSB 3";
                 hideLls(R.id.llUzsb3l, lls);
                 break;
             case R.id.btnUzsb4l:
+                strCode = "UZSB 4";
                 hideLls(R.id.llUzsb4l, lls);
                 break;
             case R.id.btnUzsb1r:
+                strCode = "UZSB 1";
                 hideLls(R.id.llUzsb1r, lls);
                 break;
             case R.id.btnUzsb2r:
+                strCode = "UZSB 2";
                 hideLls(R.id.llUzsb2r, lls);
                 break;
             case R.id.btnUzsb3r:
+                strCode = "UZSB 3";
                 hideLls(R.id.llUzsb3r, lls);
                 break;
             case R.id.btnUzsb4r:
+                strCode = "UZSB 4";
                 hideLls(R.id.llUzsb4r, lls);
                 break;
         }
