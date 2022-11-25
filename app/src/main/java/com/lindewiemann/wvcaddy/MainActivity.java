@@ -160,32 +160,66 @@ public class MainActivity extends AppCompatActivity {
         if(iWidth < 150) iWidth = 150;
         if(iWidth > 900) iWidth = 900;
 
-        LinearLayout llUzsb1l = (LinearLayout) findViewById(R.id.llUzsb1l);
-        LinearLayout llUzsb2l = (LinearLayout) findViewById(R.id.llUzsb2l);
-        LinearLayout llUzsb3l = (LinearLayout) findViewById(R.id.llUzsb3l);
-        LinearLayout llUzsb4l = (LinearLayout) findViewById(R.id.llUzsb4l);
-        LinearLayout llUzsb1r = (LinearLayout) findViewById(R.id.llUzsb1r);
-        LinearLayout llUzsb2r = (LinearLayout) findViewById(R.id.llUzsb2r);
-        LinearLayout llUzsb3r = (LinearLayout) findViewById(R.id.llUzsb3r);
-        LinearLayout llUzsb4r = (LinearLayout) findViewById(R.id.llUzsb4r);
+        /*
+        LinearLayout llUzsb1l = (LinearLayout) findViewById(R.id.llUzsb1l),
+            LinearLayout llUzsb2l = (LinearLayout) findViewById(R.id.llUzsb2l),
+            LinearLayout llUzsb3l = (LinearLayout) findViewById(R.id.llUzsb3l);
+            LinearLayout llUzsb4l = (LinearLayout) findViewById(R.id.llUzsb4l);
+            LinearLayout llUzsb1r = (LinearLayout) findViewById(R.id.llUzsb1r);
+            LinearLayout llUzsb2r = (LinearLayout) findViewById(R.id.llUzsb2r);
+            LinearLayout llUzsb3r = (LinearLayout) findViewById(R.id.llUzsb3r);
+            LinearLayout llUzsb4r = (LinearLayout) findViewById(R.id.llUzsb4r);
+         */
 
-        ImageButton btnUzsb1l = (ImageButton) findViewById(R.id.btnUzsb1l);
+        List<LinearLayout> lls = new ArrayList<LinearLayout>();
+        lls.add((LinearLayout) findViewById(R.id.llUzsb1l));
+        lls.add((LinearLayout) findViewById(R.id.llUzsb2l));
+        lls.add((LinearLayout) findViewById(R.id.llUzsb3l));
+        lls.add((LinearLayout) findViewById(R.id.llUzsb4l));
+        lls.add((LinearLayout) findViewById(R.id.llUzsb1r));
+        lls.add((LinearLayout) findViewById(R.id.llUzsb2r));
+        lls.add((LinearLayout) findViewById(R.id.llUzsb3r));
+        lls.add((LinearLayout) findViewById(R.id.llUzsb4r));
+
+        ImageButton btn = (ImageButton) findViewById(btnId);
+        android.view.ViewGroup.LayoutParams params = btn.getLayoutParams();
+        params.height = iHeight;
+        params.width = iWidth;
+        btn.setLayoutParams(params);
 
         switch(btnId) {
             case R.id.btnUzsb1l:
-                android.view.ViewGroup.LayoutParams params = btnUzsb1l.getLayoutParams();
-                params.height = iHeight;
-                params.width = iWidth;
-                btnUzsb1l.setLayoutParams(params);
-
-                llUzsb2l.setVisibility(View.GONE);
-                llUzsb3l.setVisibility(View.GONE);
-                llUzsb4l.setVisibility(View.GONE);
-                llUzsb1r.setVisibility(View.GONE);
-                llUzsb2r.setVisibility(View.GONE);
-                llUzsb3r.setVisibility(View.GONE);
-                llUzsb4r.setVisibility(View.GONE);
+                hideLls(R.id.llUzsb1l, lls);
                 break;
+            case R.id.btnUzsb2l:
+                hideLls(R.id.llUzsb2l, lls);
+                break;
+            case R.id.btnUzsb3l:
+                hideLls(R.id.llUzsb3l, lls);
+                break;
+            case R.id.btnUzsb4l:
+                hideLls(R.id.llUzsb4l, lls);
+                break;
+            case R.id.btnUzsb1r:
+                hideLls(R.id.llUzsb1r, lls);
+                break;
+            case R.id.btnUzsb2r:
+                hideLls(R.id.llUzsb2r, lls);
+                break;
+            case R.id.btnUzsb3r:
+                hideLls(R.id.llUzsb3r, lls);
+                break;
+            case R.id.btnUzsb4r:
+                hideLls(R.id.llUzsb4r, lls);
+                break;
+        }
+    }
+
+    private void hideLls(int selectedLlId, List<LinearLayout> lls) {
+        for(int i=0; i<lls.size(); i++) {
+            if(lls.get(i).getId() != selectedLlId) {
+                lls.get(i).setVisibility(View.GONE);
+            }
         }
     }
 
