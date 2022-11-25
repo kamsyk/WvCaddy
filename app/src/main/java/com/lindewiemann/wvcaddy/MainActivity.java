@@ -38,6 +38,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private final String SELECTED_IMG_BUTTON_ID = "SelectedimgButtonId";
+    private final String SHIFT_BUTTON_ID = "ShiftButtonId";
+    private final String SHIFT_ID = "ShiftId";
+    private final String CODE_ID = "Code";
+    private final String SUBCODE_ID = "SubCode";
 
     ContainerDbHelper dbHelper = new ContainerDbHelper(this);
     private AppBarConfiguration appBarConfiguration;
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private String _strCode = null;
     private String _strSubcode = null;
     private int _btnPicId = -1;
+    private int _btnShiftId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +75,10 @@ public class MainActivity extends AppCompatActivity {
         // This bundle has also been passed to onCreate.
 
         _btnPicId = savedInstanceState.getInt(SELECTED_IMG_BUTTON_ID);
-
+        _btnShiftId = savedInstanceState.getInt(SHIFT_BUTTON_ID);
+        _iShift = savedInstanceState.getInt(SHIFT_ID);
+        _strCode = savedInstanceState.getString(CODE_ID);
+        _strSubcode = savedInstanceState.getString(SUBCODE_ID);
     }
 
     @Override
@@ -79,9 +87,21 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         // Save our own state now
         outState.putInt(SELECTED_IMG_BUTTON_ID, _btnPicId);
+        outState.putInt(SHIFT_BUTTON_ID, _btnShiftId);
     }
 
     private void loadInit() {
+        setDefaultImages();
+
+        if(_btnPicId > -1) {
+            hideParts();
+        }
+        if(_btnShiftId > -1) {
+            hideShiftButtons();
+        }
+    }
+
+    private void setDefaultImages() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
@@ -106,10 +126,6 @@ public class MainActivity extends AppCompatActivity {
                 btns.get(i).setLayoutParams(params);
             }
         }
-
-        if(_btnPicId > -1) {
-            hideParts();
-        }
     }
 
     public void removeClick(View view) {
@@ -121,13 +137,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void shiftClick(View view) {
         Button btn = (Button)view;
-        int btnId = btn.getId();
+        _btnShiftId = btn.getId();
 
+        hideShiftButtons();
+    }
+
+    private void hideShiftButtons() {
         Button btnMorning = (Button) findViewById(R.id.btnMorning);
         Button btnNight = (Button) findViewById(R.id.btnNight);
         Button btnAfternoon = (Button) findViewById(R.id.btnAfternoon);
 
-        switch(btnId) {
+        switch(_btnShiftId) {
             case R.id.btnAfternoon:
                 btnMorning.setVisibility(View.GONE);
                 btnNight.setVisibility(View.GONE);
@@ -186,7 +206,10 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             long newRowId = saveToDb();
-            Toast.makeText(getApplicationContext(), "Data byla uložena (id " + newRowId + ")", Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                    getApplicationContext(),
+                    "Data byla uložena (id " + newRowId + ") " + _strCode,
+                    Toast.LENGTH_SHORT).show();
             _iShift = 0;
             _strCode = null;
             _strSubcode = null;
@@ -243,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayImages() {
         _btnPicId = -1;
-        loadInit();
+        setDefaultImages();
 
         LinearLayout llUzsb1l = (LinearLayout) findViewById(R.id.llUzsb1l);
         LinearLayout llUzsb2l = (LinearLayout) findViewById(R.id.llUzsb2l);
