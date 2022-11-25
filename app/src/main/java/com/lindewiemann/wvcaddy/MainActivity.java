@@ -1,6 +1,9 @@
 package com.lindewiemann.wvcaddy;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
@@ -25,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -33,13 +37,16 @@ import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private final String SELECTED_IMG_BUTTON_ID = "SelectedimgButtonId";
+
     ContainerDbHelper dbHelper = new ContainerDbHelper(this);
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
-    private int iShift = 0;
-    private String strCode = null;
-    private String strSubcode = null;
+    private int _iShift = 0;
+    private String _strCode = null;
+    private String _strSubcode = null;
+    private int _btnPicId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +59,26 @@ public class MainActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         loadInit();
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore UI state from the savedInstanceState.
+        // This bundle has also been passed to onCreate.
+
+        _btnPicId = savedInstanceState.getInt(SELECTED_IMG_BUTTON_ID);
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // Make sure to call the super method so that the states of our views are saved
+        super.onSaveInstanceState(outState);
+        // Save our own state now
+        outState.putInt(SELECTED_IMG_BUTTON_ID, _btnPicId);
     }
 
     private void loadInit() {
@@ -71,21 +98,25 @@ public class MainActivity extends AppCompatActivity {
         if(iWidth > 600) iWidth = 600;
 
         for (int i=0; i<btns.size(); i++) {
+            if(_btnPicId != btns.get(i).getId()) {
+                android.view.ViewGroup.LayoutParams params = btns.get(i).getLayoutParams();
+                params.height = iHeight;
+                params.width = iWidth;
 
-            android.view.ViewGroup.LayoutParams params = btns.get(i).getLayoutParams();
-            params.height = iHeight;
-            params.width = iWidth;
+                btns.get(i).setLayoutParams(params);
+            }
+        }
 
-            btns.get(i).setLayoutParams(params);
-
+        if(_btnPicId > -1) {
+            hideParts();
         }
     }
 
     public void removeClick(View view) {
         ImageButton btn = (ImageButton)view;
-        int btnId = btn.getId();
+        _btnPicId = btn.getId();
 
-        hideParts(btnId);
+        hideParts();
     }
 
     public void shiftClick(View view) {
@@ -100,28 +131,83 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btnAfternoon:
                 btnMorning.setVisibility(View.GONE);
                 btnNight.setVisibility(View.GONE);
-                iShift = LwWvCaddyDbDict.SHIFT_AFTERNOON;
+                _iShift = LwWvCaddyDbDict.SHIFT_AFTERNOON;
                 break;
             case R.id.btnNight:
                 btnMorning.setVisibility(View.GONE);
                 btnAfternoon.setVisibility(View.GONE);
-                iShift = LwWvCaddyDbDict.SHIFT_NIGHT;
+                _iShift = LwWvCaddyDbDict.SHIFT_NIGHT;
                 break;
             case R.id.btnMorning:
                 btnNight.setVisibility(View.GONE);
                 btnAfternoon.setVisibility(View.GONE);
-                iShift = LwWvCaddyDbDict.SHIFT_MORNING;
+                _iShift = LwWvCaddyDbDict.SHIFT_MORNING;
                 break;
         }
     }
 
     public void save(View view) {
-        saveToDb();
-        displayShiftButtons();
-        displayImages();
-        iShift = 0;
-        strCode = null;
-        strSubcode = null;
+        //hideParts();
+        if(_iShift == 0) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setTitle("Upozornění");
+            builder1.setMessage("Vyberte směnu");
+            builder1.setCancelable(true);
+            builder1.setNeutralButton("Zavřít",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+            //getWindow().getDecorView().findViewById(android.R.id.content).invalidate();
+            return;
+        }
+
+        if(_strCode == null || _strSubcode == null) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setTitle("Upozornění");
+            builder1.setMessage("Vyberte podsestavu");
+            builder1.setCancelable(true);
+            builder1.setNeutralButton("Zavřít",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+            //getWindow().getDecorView().findViewById(android.R.id.content).invalidate();
+            return;
+        }
+
+        try {
+            long newRowId = saveToDb();
+            Toast.makeText(getApplicationContext(), "Data byla uložena (id " + newRowId + ")", Toast.LENGTH_SHORT).show();
+            _iShift = 0;
+            _strCode = null;
+            _strSubcode = null;
+            displayShiftButtons();
+            displayImages();
+        } catch(Exception ex) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setTitle("Chyba");
+            builder1.setMessage("Při ukládání došlo k chybě");
+            builder1.setCancelable(true);
+            builder1.setNeutralButton("Zavřít",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+        }
+
     }
 
     private long saveToDb() {
@@ -133,9 +219,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SHIFT, iShift);
-        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE, strCode);
-        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE, strSubcode);
+        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SHIFT, _iShift);
+        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE, _strCode);
+        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE, _strSubcode);
         values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS, 1);
         values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE, strDate);
 
@@ -156,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayImages() {
+        _btnPicId = -1;
         loadInit();
 
         LinearLayout llUzsb1l = (LinearLayout) findViewById(R.id.llUzsb1l);
@@ -175,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
         llUzsb2r.setVisibility(View.VISIBLE);
         llUzsb3r.setVisibility(View.VISIBLE);
         llUzsb4r.setVisibility(View.VISIBLE);
+
     }
 
     public static <T extends View> List<T> find(ViewGroup root, Class<T> type) {
@@ -183,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
         return finderByType.getViews();
     }
 
-    private void hideParts(int btnId) {
+    private void hideParts() {
         Button btnSave = (Button) findViewById(R.id.btnSave);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -217,52 +305,63 @@ public class MainActivity extends AppCompatActivity {
         lls.add((LinearLayout) findViewById(R.id.llUzsb3r));
         lls.add((LinearLayout) findViewById(R.id.llUzsb4r));
 
-        ImageButton btn = (ImageButton) findViewById(btnId);
+        ImageButton btn = (ImageButton) findViewById(_btnPicId);
         android.view.ViewGroup.LayoutParams params = btn.getLayoutParams();
         params.height = iHeight;
         params.width = iWidth;
         btn.setLayoutParams(params);
+        //btn.invalidate();
+        //btn.requestLayout();
 
-        switch(btnId) {
+        switch(_btnPicId) {
             case R.id.btnUzsb1l:
-                strCode = "UZSB 1";
-                strSubcode = "810 2-4525;020 2-4529";
+                _strCode = "UZSB 1";
+                _strSubcode = "810 2-4525;020 2-4529";
                 hideLls(R.id.llUzsb1l, lls);
                 break;
             case R.id.btnUzsb2l:
-                strCode = "UZSB 2";
+                _strCode = "UZSB 2";
+                _strSubcode ="810 2-4525;020 2-4529;810 2-4533A";
                 hideLls(R.id.llUzsb2l, lls);
                 break;
             case R.id.btnUzsb3l:
-                strCode = "UZSB 3";
+                _strCode = "UZSB 3";
+                _strSubcode ="810 2-4525;020 2-4529;810 2-4533A;020 2-4531;820 8-0263";
                 hideLls(R.id.llUzsb3l, lls);
                 break;
             case R.id.btnUzsb4l:
-                strCode = "UZSB 4";
+                _strCode = "UZSB 4";
                 hideLls(R.id.llUzsb4l, lls);
                 break;
             case R.id.btnUzsb1r:
-                strCode = "UZSB 1";
+                _strCode = "UZSB 1";
                 hideLls(R.id.llUzsb1r, lls);
                 break;
             case R.id.btnUzsb2r:
-                strCode = "UZSB 2";
+                _strCode = "UZSB 2";
                 hideLls(R.id.llUzsb2r, lls);
                 break;
             case R.id.btnUzsb3r:
-                strCode = "UZSB 3";
+                _strCode = "UZSB 3";
                 hideLls(R.id.llUzsb3r, lls);
                 break;
             case R.id.btnUzsb4r:
-                strCode = "UZSB 4";
+                _strCode = "UZSB 4";
                 hideLls(R.id.llUzsb4r, lls);
                 break;
         }
+
+        //getWindow().getDecorView().findViewById(android.R.id.content).invalidate();
     }
 
     private void hideLls(int selectedLlId, List<LinearLayout> lls) {
+
         for(int i=0; i<lls.size(); i++) {
-            if(lls.get(i).getId() != selectedLlId) {
+            if(lls.get(i).getId() == selectedLlId) {
+                //lls.get(i).invalidate();
+                //lls.get(i).requestLayout();
+                //lls.get(i).setVisibility(View.VISIBLE);
+            } else {
                 lls.get(i).setVisibility(View.GONE);
             }
         }
