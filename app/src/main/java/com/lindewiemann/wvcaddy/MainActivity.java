@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 
-    private int _iShift = 0;
+    private int _iShift = -1;
     private String _strCode = null;
     private String _strSubcode = null;
     private int _btnPicId = -1;
@@ -118,7 +118,8 @@ public class MainActivity extends AppCompatActivity {
         if(iWidth > 600) iWidth = 600;
 
         for (int i=0; i<btns.size(); i++) {
-            if(_btnPicId != btns.get(i).getId()) {
+
+            if(_btnPicId != btns.get(i).getId() && btns.get(i).getId() != R.id.btnList) {
                 android.view.ViewGroup.LayoutParams params = btns.get(i).getLayoutParams();
                 params.height = iHeight;
                 params.width = iWidth;
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void save(View view) {
         //hideParts();
-        if(_iShift == 0) {
+        if(_iShift <= 0) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setTitle("Upozornění");
             builder1.setMessage("Vyberte směnu");
@@ -208,13 +209,9 @@ public class MainActivity extends AppCompatActivity {
             long newRowId = saveToDb();
             Toast.makeText(
                     getApplicationContext(),
-                    "Data byla uložena (id " + newRowId + ") " + _strCode,
+                    "Data byla uložena (id " + newRowId + ") " + getShiftName() + " " + _strCode,
                     Toast.LENGTH_SHORT).show();
-            _iShift = 0;
-            _strCode = null;
-            _strSubcode = null;
-            displayShiftButtons();
-            displayImages();
+            reset();
         } catch(Exception ex) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setTitle("Chyba");
@@ -231,6 +228,32 @@ public class MainActivity extends AppCompatActivity {
             alert11.show();
         }
 
+    }
+
+    public void back(View view) {
+        reset();
+    }
+
+    private void reset() {
+        _iShift = -1;
+        _strCode = null;
+        _strSubcode = null;
+        _btnShiftId = -1;
+        displayShiftButtons();
+        displayImages();
+    }
+
+    private String getShiftName() {
+        switch(_iShift) {
+            case LwWvCaddyDbDict.SHIFT_NIGHT:
+                return "Noční";
+            case LwWvCaddyDbDict.SHIFT_MORNING:
+                return "Ranní";
+            case LwWvCaddyDbDict.SHIFT_AFTERNOON:
+                return "Odpolední";
+        }
+
+        return "";
     }
 
     private long saveToDb() {
@@ -354,22 +377,27 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btnUzsb4l:
                 _strCode = "UZSB 4";
+                _strSubcode = "810 2-4525;020 2-4529;810 2-4533A;020 2-4531;820 8-0263;810 2-4537A";
                 hideLls(R.id.llUzsb4l, lls);
                 break;
             case R.id.btnUzsb1r:
                 _strCode = "UZSB 1";
+                _strSubcode = "810 2-4536B;020 2-4530";
                 hideLls(R.id.llUzsb1r, lls);
                 break;
             case R.id.btnUzsb2r:
                 _strCode = "UZSB 2";
+                _strSubcode = "810 2-4536B;020 2-4530;820 8-0398A";
                 hideLls(R.id.llUzsb2r, lls);
                 break;
             case R.id.btnUzsb3r:
                 _strCode = "UZSB 3";
+                _strSubcode = "810 2-4536B;020 2-4530;820 8-0398A;020 2-4532;820 8-0343";
                 hideLls(R.id.llUzsb3r, lls);
                 break;
             case R.id.btnUzsb4r:
                 _strCode = "UZSB 4";
+                _strSubcode = "810 2-4536B;020 2-4530;820 8-0398A;020 2-4532;820 8-0343;81024534A";
                 hideLls(R.id.llUzsb4r, lls);
                 break;
         }
