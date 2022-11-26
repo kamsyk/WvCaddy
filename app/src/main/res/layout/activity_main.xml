@@ -72,8 +72,9 @@
                 android:layout_marginBottom="5dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:foreground="?android:attr/selectableItemBackground"
-                android:contentDescription="Přidat vadný díl"
-                app:srcCompat="@mipmap/list" />
+                android:contentDescription="Přidat vadnou podsestavu"
+                app:srcCompat="@mipmap/list"
+                android:onClick="displayList"/>
 
         </LinearLayout>
 

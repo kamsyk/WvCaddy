@@ -3,6 +3,7 @@ package com.lindewiemann.wvcaddy;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -44,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private final String SUBCODE_ID = "SubCode";
 
     ContainerDbHelper dbHelper = new ContainerDbHelper(this);
-    private AppBarConfiguration appBarConfiguration;
-    private ActivityMainBinding binding;
+   // private AppBarConfiguration appBarConfiguration;
+    //private ActivityMainBinding binding;
 
     private int _iShift = -1;
     private String _strCode = null;
@@ -330,17 +331,6 @@ public class MainActivity extends AppCompatActivity {
         if(iWidth < 150) iWidth = 150;
         if(iWidth > 900) iWidth = 900;
 
-        /*
-        LinearLayout llUzsb1l = (LinearLayout) findViewById(R.id.llUzsb1l),
-            LinearLayout llUzsb2l = (LinearLayout) findViewById(R.id.llUzsb2l),
-            LinearLayout llUzsb3l = (LinearLayout) findViewById(R.id.llUzsb3l);
-            LinearLayout llUzsb4l = (LinearLayout) findViewById(R.id.llUzsb4l);
-            LinearLayout llUzsb1r = (LinearLayout) findViewById(R.id.llUzsb1r);
-            LinearLayout llUzsb2r = (LinearLayout) findViewById(R.id.llUzsb2r);
-            LinearLayout llUzsb3r = (LinearLayout) findViewById(R.id.llUzsb3r);
-            LinearLayout llUzsb4r = (LinearLayout) findViewById(R.id.llUzsb4r);
-         */
-
         List<LinearLayout> lls = new ArrayList<LinearLayout>();
         lls.add((LinearLayout) findViewById(R.id.llUzsb1l));
         lls.add((LinearLayout) findViewById(R.id.llUzsb2l));
@@ -356,8 +346,6 @@ public class MainActivity extends AppCompatActivity {
         params.height = iHeight;
         params.width = iWidth;
         btn.setLayoutParams(params);
-        //btn.invalidate();
-        //btn.requestLayout();
 
         switch(_btnPicId) {
             case R.id.btnUzsb1l:
@@ -438,5 +426,10 @@ public class MainActivity extends AppCompatActivity {
         public List<T> getViews() {
             return views;
         }
+    }
+
+    public void displayList(View view) {
+        Intent intent = new Intent(this, CaddyItemList.class);
+        startActivity(intent);
     }
 }
