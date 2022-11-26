@@ -73,12 +73,18 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:contentDescription="Přidat vadnou podsestavu"
-                    app:srcCompat="@mipmap/list"
+                    app:srcCompat="@mipmap/back"
                     android:onClick="displayHome"/>
 
             </LinearLayout>
 
         </LinearLayout>
+
+        <ListView
+            android:id="@+id/lvItems"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_weight="1" />
 
     </LinearLayout>
 

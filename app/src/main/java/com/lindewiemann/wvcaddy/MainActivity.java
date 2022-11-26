@@ -4,29 +4,16 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.DisplayMetrics;
 import android.view.View;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.lindewiemann.wvcaddy.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -153,17 +140,17 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btnAfternoon:
                 btnMorning.setVisibility(View.GONE);
                 btnNight.setVisibility(View.GONE);
-                _iShift = LwWvCaddyDbDict.SHIFT_AFTERNOON;
+                _iShift = LwVwCaddyDbDict.SHIFT_AFTERNOON;
                 break;
             case R.id.btnNight:
                 btnMorning.setVisibility(View.GONE);
                 btnAfternoon.setVisibility(View.GONE);
-                _iShift = LwWvCaddyDbDict.SHIFT_NIGHT;
+                _iShift = LwVwCaddyDbDict.SHIFT_NIGHT;
                 break;
             case R.id.btnMorning:
                 btnNight.setVisibility(View.GONE);
                 btnAfternoon.setVisibility(View.GONE);
-                _iShift = LwWvCaddyDbDict.SHIFT_MORNING;
+                _iShift = LwVwCaddyDbDict.SHIFT_MORNING;
                 break;
         }
     }
@@ -210,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
             long newRowId = saveToDb();
             Toast.makeText(
                     getApplicationContext(),
-                    "Data byla uložena (id " + newRowId + ") " + getShiftName() + " " + _strCode,
+                    "Data byla uložena (id " + newRowId + ") " + LwVwCaddyDbDict.getShiftName(_iShift) + " " + _strCode,
                     Toast.LENGTH_SHORT).show();
             reset();
         } catch(Exception ex) {
@@ -244,19 +231,6 @@ public class MainActivity extends AppCompatActivity {
         displayImages();
     }
 
-    private String getShiftName() {
-        switch(_iShift) {
-            case LwWvCaddyDbDict.SHIFT_NIGHT:
-                return "Noční";
-            case LwWvCaddyDbDict.SHIFT_MORNING:
-                return "Ranní";
-            case LwWvCaddyDbDict.SHIFT_AFTERNOON:
-                return "Odpolední";
-        }
-
-        return "";
-    }
-
     private long saveToDb() {
         Date date = new Date();
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
@@ -266,14 +240,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SHIFT, _iShift);
-        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE, _strCode);
-        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE, _strSubcode);
-        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS, 1);
-        values.put(LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE, strDate);
+        values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SHIFT, _iShift);
+        values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE, _strCode);
+        values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE, _strSubcode);
+        values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS, 1);
+        values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE, strDate);
 
         // Insert the new row, returning the primary key value of the new row
-        long newRowId = db.insert(LwWvCaddyDbDict.WvCaddyEntry.TABLE_NAME, null, values);
+        long newRowId = db.insert(LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME, null, values);
 
         return newRowId;
     }

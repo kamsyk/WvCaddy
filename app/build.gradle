@@ -29,6 +29,13 @@ android {
     buildFeatures {
         viewBinding true
     }
+    sourceSets {
+        main {
+            java {
+                srcDirs 'src\\main\\java', 'src\\main\\java\\adapters', 'src\\main\\java\\com.lindewiemann.wvcaddy\\adapters', 'src\\main\\java\\com.lindewiemann.com\\adapters'
+            }
+        }
+    }
 }
 
 dependencies {

@@ -10,14 +10,14 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "LwWvCaddy.db";
 
     private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + LwWvCaddyDbDict.WvCaddyEntry.TABLE_NAME + " ("
-                    + LwWvCaddyDbDict.WvCaddyEntry._ID + " INTEGER PRIMARY KEY,"
-                    + LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SHIFT + " INTEGER,"
-                    + LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE + " TEXT,"
-                    + LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE + " TEXT,"
-                    + LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS + " INTEGER,"
-                    + LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE + " TEXT,"
-                    + LwWvCaddyDbDict.WvCaddyEntry.COLUMN_NAME_USER_CODE + " INTEGER"
+            "CREATE TABLE " + LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME + " ("
+                    + LwVwCaddyDbDict.WvCaddyEntry._ID + " INTEGER PRIMARY KEY,"
+                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SHIFT + " INTEGER,"
+                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS + " INTEGER,"
+                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_USER_CODE + " INTEGER"
                     + ")";
 
     public ContainerDbHelper(Context context) {
