@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lindewiemann.wvcaddy.LwVwCaddyDbDict;
@@ -12,7 +13,7 @@ import com.lindewiemann.wvcaddy.R;
 
 import androidx.cursoradapter.widget.CursorAdapter;
 
-public class VwCaddyItemsAdapter extends CursorAdapter {
+public class VwCaddyItemsAdapter extends VwCaddyCursorAdapter {
     public VwCaddyItemsAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
     }
@@ -29,6 +30,7 @@ public class VwCaddyItemsAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         // Find fields to populate in inflated template
+        LinearLayout llWrapper = (LinearLayout) view.findViewById(R.id.llWrapper);
         TextView tvDatum = (TextView) view.findViewById(R.id.tvDatum);
         TextView tvTime = (TextView) view.findViewById(R.id.tvTime);
         TextView tvShift = (TextView) view.findViewById(R.id.tvShift);

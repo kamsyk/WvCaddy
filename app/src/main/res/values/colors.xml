@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="left">#FFFF00</color>
     <color name="right">#00CCFF</color>
+    <color name="odd">#FFFFFF</color>
+    <color name="even">#00CCFF</color>
 </resources>
