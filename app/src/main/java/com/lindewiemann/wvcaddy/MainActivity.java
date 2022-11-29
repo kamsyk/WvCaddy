@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private final String SHIFT_ID = "ShiftId";
     private final String CODE_ID = "Code";
     private final String SUBCODE_ID = "SubCode";
+    private final String LEFT_RIGHT = "LeftRight";
 
     ContainerDbHelper dbHelper = new ContainerDbHelper(this);
    // private AppBarConfiguration appBarConfiguration;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private String _strSubcode = null;
     private int _btnPicId = -1;
     private int _btnShiftId = -1;
+    private int _iLeftRight = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         _iShift = savedInstanceState.getInt(SHIFT_ID);
         _strCode = savedInstanceState.getString(CODE_ID);
         _strSubcode = savedInstanceState.getString(SUBCODE_ID);
+        _iLeftRight = savedInstanceState.getInt(LEFT_RIGHT);
     }
 
     @Override
@@ -76,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
         // Save our own state now
         outState.putInt(SELECTED_IMG_BUTTON_ID, _btnPicId);
         outState.putInt(SHIFT_BUTTON_ID, _btnShiftId);
+        outState.putInt(SHIFT_ID, _iShift);
+        outState.putString(CODE_ID, _strCode);
+        outState.putString(SUBCODE_ID, _strSubcode);
+        outState.putInt(LEFT_RIGHT, _iLeftRight);
     }
 
     private void loadInit() {
@@ -227,6 +234,7 @@ public class MainActivity extends AppCompatActivity {
         _strCode = null;
         _strSubcode = null;
         _btnShiftId = -1;
+        _iLeftRight = -1;
         displayShiftButtons();
         displayImages();
     }
@@ -245,9 +253,31 @@ public class MainActivity extends AppCompatActivity {
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE, _strSubcode);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS, 1);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE, strDate);
+        values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR, _iLeftRight);
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME, null, values);
+
+        ArrayList<String> strSubCodeLines = new ArrayList<String>();
+        if(_strSubcode != null) {
+            String[] strSubcodes = _strSubcode.split(";");
+            for (int i = 0; i < strSubcodes.length; i++) {
+                strSubCodeLines.add(strSubcodes[i]);
+            }
+        }
+
+        if(strSubCodeLines.size() > 0) {
+            for(int i=0; i<strSubCodeLines.size(); i++) {
+                ContentValues valuesSubcode = new ContentValues();
+                valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_SHIFT, _iShift);
+                valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_CODE, _strCode);
+                valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_SUBCODE, strSubCodeLines.get(i));
+                valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_PCS, 1);
+                valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_DATE, strDate);
+                valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_LR, _iLeftRight);
+                db.insert(LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME, null, valuesSubcode);
+            }
+        }
 
         return newRowId;
     }
@@ -325,41 +355,49 @@ public class MainActivity extends AppCompatActivity {
             case R.id.btnUzsb1l:
                 _strCode = "UZSB 1";
                 _strSubcode = "810 2-4525;020 2-4529";
+                _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb1l, lls);
                 break;
             case R.id.btnUzsb2l:
                 _strCode = "UZSB 2";
                 _strSubcode ="810 2-4525;020 2-4529;810 2-4533A";
+                _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb2l, lls);
                 break;
             case R.id.btnUzsb3l:
                 _strCode = "UZSB 3";
                 _strSubcode ="810 2-4525;020 2-4529;810 2-4533A;020 2-4531;820 8-0263";
+                _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb3l, lls);
                 break;
             case R.id.btnUzsb4l:
                 _strCode = "UZSB 4";
                 _strSubcode = "810 2-4525;020 2-4529;810 2-4533A;020 2-4531;820 8-0263;810 2-4537A";
+                _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb4l, lls);
                 break;
             case R.id.btnUzsb1r:
                 _strCode = "UZSB 1";
                 _strSubcode = "810 2-4536B;020 2-4530";
+                _iLeftRight = LwVwCaddyDbDict.CODE_RIGHT;
                 hideLls(R.id.llUzsb1r, lls);
                 break;
             case R.id.btnUzsb2r:
                 _strCode = "UZSB 2";
                 _strSubcode = "810 2-4536B;020 2-4530;820 8-0398A";
+                _iLeftRight = LwVwCaddyDbDict.CODE_RIGHT;
                 hideLls(R.id.llUzsb2r, lls);
                 break;
             case R.id.btnUzsb3r:
                 _strCode = "UZSB 3";
                 _strSubcode = "810 2-4536B;020 2-4530;820 8-0398A;020 2-4532;820 8-0343";
+                _iLeftRight = LwVwCaddyDbDict.CODE_RIGHT;
                 hideLls(R.id.llUzsb3r, lls);
                 break;
             case R.id.btnUzsb4r:
                 _strCode = "UZSB 4";
                 _strSubcode = "810 2-4536B;020 2-4530;820 8-0398A;020 2-4532;820 8-0343;81024534A";
+                _iLeftRight = LwVwCaddyDbDict.CODE_RIGHT;
                 hideLls(R.id.llUzsb4r, lls);
                 break;
         }

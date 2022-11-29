@@ -183,7 +183,7 @@
                                 android:background="@color/left"
                                 android:paddingLeft="5dp"
                                 android:textColor="#000"
-                                android:text="UZSB 1"
+                                android:text="UZSB 1 LEVÉ"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -220,7 +220,7 @@
                                 android:background="@color/left"
                                 android:paddingLeft="5dp"
                                 android:textColor="#000"
-                                android:text="UZSB 2"
+                                android:text="UZSB 2 LEVÉ"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -260,7 +260,7 @@
                                 android:background="@color/left"
                                 android:paddingLeft="5dp"
                                 android:textColor="#000"
-                                android:text="UZSB 3"
+                                android:text="UZSB 3 LEVÉ"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -295,7 +295,7 @@
                                 android:background="@color/left"
                                 android:paddingLeft="5dp"
                                 android:textColor="#000"
-                                android:text="UZSB 4"
+                                android:text="UZSB 4 LEVÉ"
                                 android:textSize="16sp"
                                 android:textStyle="bold"/>
 
@@ -330,7 +330,7 @@
                                 android:background="@color/right"
                                 android:paddingLeft="5dp"
                                 android:textColor="#000"
-                                android:text="UZSB 1"
+                                android:text="UZSB 1 PRAVÉ"
                                 android:textSize="16sp"
                                 android:textStyle="bold"/>
 
@@ -364,7 +364,7 @@
                                 android:background="@color/right"
                                 android:paddingLeft="5dp"
                                 android:textColor="#000"
-                                android:text="UZSB 2"
+                                android:text="UZSB 2 PRAVÉ"
                                 android:textSize="16sp"
                                 android:textStyle="bold"/>
 
@@ -398,7 +398,7 @@
                                 android:background="@color/right"
                                 android:paddingLeft="5dp"
                                 android:textColor="#000"
-                                android:text="UZSB 3"
+                                android:text="UZSB 3 PRAVÉ"
                                 android:textSize="16sp"
                                 android:textStyle="bold"/>
 
@@ -432,7 +432,7 @@
                                 android:background="@color/right"
                                 android:paddingLeft="5dp"
                                 android:textColor="#000"
-                                android:text="UZSB 4"
+                                android:text="UZSB 4 PRAVÉ"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 

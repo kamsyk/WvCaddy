@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WvCaddy</string>
+    <string name="app_name">VW Caddy</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">VW Caddy - Evidence vyřazených podsestav</string>
