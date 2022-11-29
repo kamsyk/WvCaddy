@@ -70,7 +70,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:textSize="14dp"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:minWidth="100dp"/>
 
             <TextView
                 android:id="@+id/tvSubCode"

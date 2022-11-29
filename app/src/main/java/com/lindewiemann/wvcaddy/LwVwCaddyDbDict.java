@@ -48,4 +48,16 @@ public final class LwVwCaddyDbDict {
         return "";
     }
 
+    public static String getLeftRightText(int iLr) {
+        switch(iLr) {
+            case LwVwCaddyDbDict.CODE_LEFT:
+                return "LEVÉ";
+            case LwVwCaddyDbDict.CODE_RIGHT:
+                return "PRAVÉ";
+
+        }
+
+        return "";
+    }
+
 }

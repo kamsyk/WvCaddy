@@ -214,9 +214,8 @@ public class CaddyItemList extends AppCompatActivity {
 
                 String strHeader = "Datum,"
                         + "Kód,"
+                        + "Levé / Pravé,"
                         + "Subkód,"
-                        + "Kód chyby,"
-                        + "Popis chyby,"
                         + "Počet kusů"
                         + System.lineSeparator();
                 myOutWriter.append(strHeader);
@@ -239,26 +238,26 @@ public class CaddyItemList extends AppCompatActivity {
         }
 
         private String getExportLine(Cursor cursor) {
-            /*String strDateTime = cursor.getString(cursor.getColumnIndexOrThrow(LwKontejnerDbDict.OdpadEntry.COLUMN_NAME_DATUM));
-            String strProject = cursor.getString(cursor.getColumnIndexOrThrow(LwKontejnerDbDict.OdpadEntry.COLUMN_NAME_PROJEKT));
+            String strDateTime = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE));
+            /*String strProject = cursor.getString(cursor.getColumnIndexOrThrow(LwKontejnerDbDict.OdpadEntry.COLUMN_NAME_PROJEKT));
             String strChyba = cursor.getString(cursor.getColumnIndexOrThrow(LwKontejnerDbDict.OdpadEntry.COLUMN_NAME_CHYBA_NAME));
             String strUserCode = cursor.getString(cursor.getColumnIndexOrThrow(LwKontejnerDbDict.OdpadEntry.COLUMN_NAME_USER_CODE));
             int iChyba = cursor.getInt(cursor.getColumnIndexOrThrow(LwKontejnerDbDict.OdpadEntry.COLUMN_NAME_CHYBA_ID));
-            int iKs = cursor.getInt(cursor.getColumnIndexOrThrow(LwKontejnerDbDict.OdpadEntry.COLUMN_NAME_KS));
+            int iKs = cursor.getInt(cursor.getColumnIndexOrThrow(LwKontejnerDbDict.OdpadEntry.COLUMN_NAME_KS));*/
 
-            String strKs = String.valueOf(iKs);
-            String strKodChyby = String.valueOf(iChyba);
+            //String strKs = String.valueOf(iKs);
+            //String strKodChyby = String.valueOf(iChyba);
 
-            String exportLine = strDateTime + ","
-                    + strProject + ","
+            String exportLine = strDateTime + ",";
+                    /*+ strProject + ","
                     + strUserCode + ","
                     + strKodChyby + ","
                     + strChyba + ","
-                    + strKs;
+                    + strKs;*/
             exportLine += System.lineSeparator();
 
-            return exportLine;*/
-            return null;
+            return exportLine;
+
         }
     }
 

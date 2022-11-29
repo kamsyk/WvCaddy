@@ -44,6 +44,9 @@ public class VwCaddyItemsAdapter extends VwCaddyCursorAdapter {
         int iPcs = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS));
         String strCode = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE));
         String strSubCode = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE));
+        int iLr = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR));
+        String strLr = LwVwCaddyDbDict.getLeftRightText(iLr);
+        strCode += " " + strLr;
 
         String strSubCodeLines = "";
         if(strSubCode != null) {

@@ -224,11 +224,7 @@
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
-                            <LinearLayout
-                            android:layout_height="0dp"
-                            android:layout_width="match_parent"
-                            android:layout_weight="1"
-                            android:orientation="horizontal">
+
                             <ImageButton
                                 android:id="@+id/btnUzsb2l"
                                 android:layout_height="match_parent"
@@ -236,10 +232,11 @@
                                 android:layout_weight="1"
                                 android:padding="10dp"
                                 android:src="@drawable/uzsb2l"
+                                android:tag="uzsb1l"
                                 android:adjustViewBounds="true"
                                 android:scaleType="fitCenter"
                                 android:onClick="removeClick"/>
-                            </LinearLayout>
+
                         </LinearLayout>
 
                         <LinearLayout
