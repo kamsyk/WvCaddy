@@ -213,6 +213,7 @@ public class CaddyItemList extends AppCompatActivity {
                 myOutWriter.write("\ufeff"); // Add BOM to UTF-8 necessary for displaying Czech chars in excel in windows
 
                 String strHeader = "Datum,"
+                        + "Směna,"
                         + "Kód,"
                         + "Levé / Pravé,"
                         + "Subkód,"

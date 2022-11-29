@@ -52,7 +52,7 @@ public class VwCaddyItemsAdapter extends VwCaddyCursorAdapter {
         if(strSubCode != null) {
             String[] strSubcodes = strSubCode.split(";");
             for (int i = 0; i < strSubcodes.length; i++) {
-                if (strSubCodeLines.length() > 0) strSubCodeLines += "\r\n";
+                if (strSubCodeLines.length() > 0) strSubCodeLines += System.lineSeparator();
                 strSubCodeLines += strSubcodes[i];
             }
         }
