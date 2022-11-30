@@ -6,10 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class ContainerDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "LwWvCaddy.db";
 
-    private static final String SQL_CREATE_ENTRIES =
+    private static final String SQL_CREATE_ENTRIES_CADDY =
             "CREATE TABLE " + LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME + " ("
                     + LwVwCaddyDbDict.WvCaddyEntry._ID + " INTEGER PRIMARY KEY,"
                     + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SHIFT + " INTEGER,"
@@ -17,14 +17,28 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                     + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS + " INTEGER,"
                     + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE + " TEXT,"
-                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_USER_CODE + " INTEGER"
+                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_USER_CODE + " INTEGER,"
+                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR + " INTEGER"
+                    + ")";
+
+    private static final String SQL_CREATE_ENTRIES_CADDY_SUBCODE =
+            "CREATE TABLE " + LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME + " ("
+                    + LwVwCaddyDbDict.WvCaddySubcodeEntry._ID + " INTEGER PRIMARY KEY,"
+                    + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_SHIFT + " INTEGER,"
+                    + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_SUBCODE + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_PCS + " INTEGER,"
+                    + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_DATE + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_USER_CODE + " INTEGER,"
+                    + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_LR + " INTEGER"
                     + ")";
 
     public ContainerDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+
+        db.execSQL(SQL_CREATE_ENTRIES_CADDY);
+        db.execSQL(SQL_CREATE_ENTRIES_CADDY_SUBCODE);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         DbUpgrade(db);
@@ -35,9 +49,8 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
     }
 
     private void DbUpgrade(SQLiteDatabase db) {
-        if(!IsExistsTable(db, LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME)) {
-            String sql =
-                    "CREATE TABLE " + LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME + " ("
+       /*String sql =
+                    "CREATE TABLE IF NOT EXISTS " + LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME + " ("
                             + LwVwCaddyDbDict.WvCaddySubcodeEntry._ID + " INTEGER PRIMARY KEY,"
                             + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_SHIFT + " INTEGER,"
                             + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_SUBCODE + " TEXT,"
@@ -46,37 +59,7 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                             + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_USER_CODE + " INTEGER"
                             + ")";
             db.execSQL(sql);
-        }
-
-        if(!IsExistsColumnInTable(db,
-                LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME,
-                LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR)) {
-            String sql = "ALTER TABLE "
-                    + LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME
-                    + " ADD COLUMN " + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR
-                    + " INTEGER";
-            db.execSQL(sql);
-        }
-
-        if(!IsExistsColumnInTable(db,
-                LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME,
-                LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_LR)) {
-            String sql = "ALTER TABLE "
-                    + LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME
-                    + " ADD COLUMN " + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_LR
-                    + " INTEGER";
-            db.execSQL(sql);
-        }
-
-        if(!IsExistsColumnInTable(db,
-                LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME,
-                LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE)) {
-            String sql = "ALTER TABLE "
-                    + LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME
-                    + " ADD COLUMN " + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE
-                    + " INTEGER";
-            db.execSQL(sql);
-        }
+        */
     }
 
     private boolean IsExistsColumnInTable(SQLiteDatabase lwVwDb, String lwWvTable, String columnToCheck) {
