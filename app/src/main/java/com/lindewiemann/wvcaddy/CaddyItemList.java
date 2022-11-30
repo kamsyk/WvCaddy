@@ -21,6 +21,9 @@ import android.widget.ListView;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.lindewiemann.wvcaddy.adapters.VwCaddyItemsAdapter;
+import com.mailjet.client.errors.MailjetException;
+
+import org.json.JSONException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -111,6 +114,17 @@ public class CaddyItemList extends AppCompatActivity {
             alert11.show();
         }
     }
+
+    public void sendMail(View v) {
+        try {
+            LwMailClient.sendMail();
+        } catch (MailjetException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private boolean isExportFolderExist(Context context) {
         folder = context.getExternalFilesDir(null);
@@ -261,6 +275,8 @@ public class CaddyItemList extends AppCompatActivity {
             return exportLine;
 
         }
+
+
     }
 
 }
