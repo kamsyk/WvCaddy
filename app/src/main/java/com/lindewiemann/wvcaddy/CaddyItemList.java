@@ -16,7 +16,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ListView;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -117,7 +116,7 @@ public class CaddyItemList extends AppCompatActivity {
 
     public void sendMail(View v) {
         try {
-            LwMailClient.sendMail();
+            LwMailJetClient.sendMail();
         } catch (MailjetException e) {
             e.printStackTrace();
         } catch (JSONException e) {
