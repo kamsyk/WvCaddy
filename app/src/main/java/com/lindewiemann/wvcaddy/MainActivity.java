@@ -1,5 +1,6 @@
 package com.lindewiemann.wvcaddy;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -10,12 +11,15 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -83,6 +87,13 @@ public class MainActivity extends AppCompatActivity {
         outState.putString(CODE_ID, _strCode);
         outState.putString(SUBCODE_ID, _strSubcode);
         outState.putInt(LEFT_RIGHT, _iLeftRight);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     private void loadInit() {
@@ -441,7 +452,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void displayList(View view) {
-        Intent intent = new Intent(this, CaddyItemList.class);
-        startActivity(intent);
+        ImageButton imgList = findViewById(R.id.btnList);
+
+        PopupMenu popupMenu = new PopupMenu(getApplicationContext(), imgList);//View will be an anchor for PopupMenu
+        popupMenu.inflate(R.menu.menu_main);
+        Menu menu = popupMenu.getMenu();
+        popupMenu.setOnMenuItemClickListener(
+                new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case R.id.full_list:
+                                Intent intentList = new Intent(getApplicationContext(), CaddyItemList.class);
+                                startActivity(intentList);
+                                break;
+                            case R.id.app_settinga:
+                                Intent intentSettings = new Intent(getApplicationContext(), VwCaddy_Settings.class);
+                                startActivity(intentSettings);
+                                break;
+                            default:
+                                break;
+                        }
+
+                        return false;
+                    }
+                }
+
+        );
+        popupMenu.show();
+
+        //Intent intent = new Intent(this, CaddyItemList.class);
+        //startActivity(intent);
     }
 }

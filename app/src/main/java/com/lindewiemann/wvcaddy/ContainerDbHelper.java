@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class ContainerDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "LwWvCaddy.db";
 
     private static final String SQL_CREATE_ENTRIES_CADDY =
@@ -32,6 +32,16 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                     + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_LR + " INTEGER"
                     + ")";
 
+    private static final String SQL_CREATE_ENTRIES_CADDY_SETTINGS =
+            "CREATE TABLE " + LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME + " ("
+                    + LwVwCaddyDbDict.WvCaddySettings._ID + " INTEGER PRIMARY KEY,"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_SENDER + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_RECIPIENTS + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD + " TEXT"
+                    + ")";
+
     public ContainerDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -39,6 +49,7 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
 
         db.execSQL(SQL_CREATE_ENTRIES_CADDY);
         db.execSQL(SQL_CREATE_ENTRIES_CADDY_SUBCODE);
+        db.execSQL(SQL_CREATE_ENTRIES_CADDY_SETTINGS);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         DbUpgrade(db);
@@ -49,6 +60,18 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
     }
 
     private void DbUpgrade(SQLiteDatabase db) {
+        if(DATABASE_VERSION < 3) {
+            String sql =
+                    "CREATE TABLE IF NOT EXISTS " + LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME + " ("
+                            + LwVwCaddyDbDict.WvCaddySettings._ID + " INTEGER PRIMARY KEY,"
+                            + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_SENDER + " TEXT,"
+                            + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_RECIPIENTS + " TEXT,"
+                            + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY + " TEXT,"
+                            + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY + " TEXT,"
+                            + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD + " TEXT"
+                            + ")";
+            db.execSQL(sql);
+        }
        /*String sql =
                     "CREATE TABLE IF NOT EXISTS " + LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME + " ("
                             + LwVwCaddyDbDict.WvCaddySubcodeEntry._ID + " INTEGER PRIMARY KEY,"

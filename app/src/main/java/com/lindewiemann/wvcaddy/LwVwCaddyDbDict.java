@@ -35,6 +35,15 @@ public final class LwVwCaddyDbDict {
         public static final String COLUMN_NAME_LR = "lr";
     }
 
+    public static class WvCaddySettings implements BaseColumns {
+        public static final String TABLE_NAME = "wvcaddysettings";
+        public static final String COLUMN_NAME_MAILJET_API_KEY = "mailjet_api_key";
+        public static final String COLUMN_NAME_MAILJET_SECRET_KEY = "mailjet_secret_key";
+        public static final String COLUMN_NAME_MAIL_SENDER = "mail_sender";
+        public static final String COLUMN_NAME_MAIL_RECIPIENTS = "mail_recipients";
+        public static final String COLUMN_NAME_PASSWORD = "mail_password";
+    }
+
     public static String getShiftName(int iShift) {
         switch(iShift) {
             case LwVwCaddyDbDict.SHIFT_NIGHT:
