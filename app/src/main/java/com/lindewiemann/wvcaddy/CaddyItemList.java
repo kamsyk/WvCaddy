@@ -94,6 +94,7 @@ public class CaddyItemList extends AppCompatActivity {
 
     }
 
+
     public void exportToFile(View v) {
         try {
             progressBar = findViewById(R.id.pgbExport);
@@ -295,7 +296,7 @@ public class CaddyItemList extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             try {
                 new ExportAsyncTask().exportThread();
-                new LwMailJetClient().sendMail(fullExportPath);
+                new LwMailJetClient(getApplicationContext()).sendMail(fullExportPath);
 
                 return true;
             } catch (IOException | InterruptedException e) {
@@ -304,20 +305,22 @@ public class CaddyItemList extends AppCompatActivity {
                 return false;
             } catch (MailjetException e) {
                 return false;
+            } catch (Exception e) {
+                return false;
             }
 
         }
         @Override
         protected void onPostExecute(Boolean result) {
             progressBar.setVisibility(View.GONE);
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+
             if(result) {
                 Toast.makeText(
                         getApplicationContext(),
                         "Mail byl odeslán",
                         Toast.LENGTH_SHORT).show();
             } else {
-
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
                 builder1.setTitle("Došlo k chybě");
                 builder1.setMessage("Při odesílání mailu došlo k chybě");
                 builder1.setCancelable(true);

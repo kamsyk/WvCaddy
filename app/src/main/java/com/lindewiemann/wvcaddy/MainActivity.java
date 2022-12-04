@@ -268,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME, null, values);
+        db.close();
 
         ArrayList<String> strSubCodeLines = new ArrayList<String>();
         if(_strSubcode != null) {
@@ -287,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_DATE, strDate);
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_LR, _iLeftRight);
                 db.insert(LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME, null, valuesSubcode);
+                db.close();
             }
         }
 

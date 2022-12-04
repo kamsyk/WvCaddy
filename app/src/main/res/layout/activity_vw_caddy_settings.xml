@@ -92,12 +92,63 @@
                 android:text="Mailová adresa odesílatele"/>
 
             <EditText
+                android:id="@+id/txtSender"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:background="@drawable/edittext_border"
-                android:padding="2dp"
-                />
+                android:padding="2dp" />
 
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Mailové adresy příjemců (oddělé ;)"/>
+
+            <EditText
+                android:id="@+id/txtRecipients"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:background="@drawable/edittext_border"
+                android:padding="2dp" />
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Mailjet API Key"/>
+
+            <EditText
+                android:id="@+id/txtMailjetApiKey"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:background="@drawable/edittext_border"
+                android:padding="2dp" />
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Mailjet Private Key"/>
+
+            <EditText
+                android:id="@+id/txtMailjetSecretKey"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:background="@drawable/edittext_border"
+                android:padding="2dp" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:height="65dp"
+                android:minHeight="65dp"
+                android:text="Uložit"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:layout_weight="0.4"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:backgroundTint="@drawable/save_button"
+                android:onClick="save"
+                />
         </LinearLayout>
 
     </LinearLayout>
