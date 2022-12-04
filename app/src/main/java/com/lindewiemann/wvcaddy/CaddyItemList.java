@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.lindewiemann.wvcaddy.adapters.VwCaddyItemsAdapter;
@@ -38,6 +39,7 @@ public class CaddyItemList extends AppCompatActivity {
     ContainerDbHelper dbHelper = new ContainerDbHelper(this);
     private LinearProgressIndicator progressBar = null;
     File folder = null;
+    String fullExportPath;
     Context context = this;
 
     @Override
@@ -116,11 +118,22 @@ public class CaddyItemList extends AppCompatActivity {
 
     public void sendMail(View v) {
         try {
-            LwMailJetClient.sendMail();
-        } catch (MailjetException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+            if (isExportFolderExist(v.getContext())) {
+                progressBar = findViewById(R.id.pgbExport);
+                new SendMailAsyncTask().execute();
+            }
+        } catch (Exception e) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+            builder1.setTitle("Došlo k chybě");
+            builder1.setMessage("Odeslání mailu selhalo");
+            builder1.setCancelable(true);
+            builder1.setNeutralButton("Zavřít",
+                    (DialogInterface dialog, int id) ->
+                            dialog.cancel()
+            );
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
         }
     }
 
@@ -174,9 +187,8 @@ public class CaddyItemList extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
             AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
             if(result) {
-
                 builder1.setTitle("Export byl dokončen");
-                builder1.setMessage("Data byla uložena do souboru " + folder.getAbsolutePath() + "/" + fileName);
+                builder1.setMessage("Data byla uložena do souboru " + fullExportPath);
                 builder1.setCancelable(true);
                 builder1.setNeutralButton("Zavřít",
                         (DialogInterface dialog, int id) ->
@@ -209,7 +221,7 @@ public class CaddyItemList extends AppCompatActivity {
             progressBar.setProgress(values[0]);
         }
 
-        private void exportThread() throws IOException, InterruptedException {
+        public void exportThread() throws IOException, InterruptedException {
 
             try {
                 Date date = new Date();
@@ -246,6 +258,8 @@ public class CaddyItemList extends AppCompatActivity {
                 }
                 myOutWriter.close();
                 fOut.close();
+
+                fullExportPath = folder.getAbsolutePath() + "/" + fileName;
             } catch(Exception ex) {
                 throw ex;
             }
@@ -274,8 +288,57 @@ public class CaddyItemList extends AppCompatActivity {
             return exportLine;
 
         }
-
-
     }
 
+    class SendMailAsyncTask extends AsyncTask<Void, Integer, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                new ExportAsyncTask().exportThread();
+                new LwMailJetClient().sendMail(fullExportPath);
+
+                return true;
+            } catch (IOException | InterruptedException e) {
+                return false;
+            } catch (JSONException e) {
+                return false;
+            } catch (MailjetException e) {
+                return false;
+            }
+
+        }
+        @Override
+        protected void onPostExecute(Boolean result) {
+            progressBar.setVisibility(View.GONE);
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+            if(result) {
+                Toast.makeText(
+                        getApplicationContext(),
+                        "Mail byl odeslán",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+
+                builder1.setTitle("Došlo k chybě");
+                builder1.setMessage("Při odesílání mailu došlo k chybě");
+                builder1.setCancelable(true);
+                builder1.setNeutralButton("Zavřít",
+                        (DialogInterface dialog, int id) ->
+                                dialog.cancel()
+                );
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
+        }
+        @Override
+        protected void onPreExecute() {
+
+            progressBar.setProgress(0);
+        }
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            //Log.d("Progress", String.valueOf(values[0]));
+            progressBar.setProgress(values[0]);
+        }
+    }
 }

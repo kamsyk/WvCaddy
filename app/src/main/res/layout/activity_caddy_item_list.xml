@@ -133,7 +133,7 @@
                     android:layout_marginRight="4dp"
                     android:textSize="16sp"
                     android:onClick="sendMail"
-                    android:enabled="false"/>
+                    android:enabled="true"/>
 
             </LinearLayout>
         </LinearLayout>
