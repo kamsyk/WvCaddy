@@ -87,7 +87,7 @@ public class LwMailJetClient {
             }
         }
 
-        request = new MailjetRequest(Emailv31.resource)
+        /*request = new MailjetRequest(Emailv31.resource)
                 .property(Emailv31.MESSAGES, new JSONArray()
                         .put(new JSONObject()
                                 .put(Emailv31.Message.FROM, new JSONObject()
@@ -105,13 +105,39 @@ public class LwMailJetClient {
                                                 .put(new JSONObject().put("ContentType", "application/csv")
                                                         .put("Filename", "abc.csv")
                                                         .put("Base64Content", base64))
-                                                    /*.put(new JSONObject().put("ContentType", "application/csv")
+                                                    .put(new JSONObject().put("ContentType", "application/csv")
                                                             .put("Filename", "abc1.csv")
-                                                            .put("Base64Content", base64))*/
+                                                            .put("Base64Content", base64))
                                 )
-                        ));
+                        ));*/
 
-       
+        String[] strFile1NameItems = file1Path.split("/");
+        String strFile1Name = strFile1NameItems[strFile1NameItems.length - 1];
+
+        JSONObject msg = new JSONObject();
+        msg.put(Emailv31.Message.FROM, new JSONObject()
+                .put("Email", mailSender)
+                .put("Name", "Wv Caddy"));
+        msg.put(Emailv31.Message.SUBJECT, "VW Caddy Test");
+        msg.put(Emailv31.Message.TEXTPART, "Výpis vadných VW Caddy podsestav je v příloze.");
+        msg.put(Emailv31.Message.HTMLPART, "Výpis vadných VW Caddy podsestav je v příloze.");
+        msg.put(Emailv31.Message.ATTACHMENTS,
+                        new JSONArray()
+                                .put(new JSONObject().put("ContentType", "application/csv")
+                                        .put("Filename", strFile1Name)
+                                        .put("Base64Content", base64)));
+        JSONArray recipientsArray = new JSONArray();
+        for(int i=0; i<strRecipients.size(); i++) {
+            recipientsArray.put(new JSONObject()
+                    .put("Email", strRecipients.get(i))
+                    .put("Name", "You"));
+        }
+        msg.put(Emailv31.Message.TO, recipientsArray);
+
+        request = new MailjetRequest(Emailv31.resource)
+                .property(Emailv31.MESSAGES, new JSONArray()
+                                .put(msg));
+
         response = client.post(request);
         System.out.println(response.getStatus());
         System.out.println(response.getData());

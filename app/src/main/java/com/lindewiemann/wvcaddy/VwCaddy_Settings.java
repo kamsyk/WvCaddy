@@ -61,7 +61,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
 
                 // Insert the new row, returning the primary key value of the new row
                 long newRowId = db.insert(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, null, values);
-                db.close();
+                //db.close();
             } else {
                 cursor.moveToFirst();
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
@@ -77,7 +77,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
                 // on below line we are calling a update method to update our database and passing our values.
                 // and we are comparing it with name of our course which is stored in original name variable.
                 db.update(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, values, null, null);
-                db.close();
+                //db.close();
             }
 
             Toast.makeText(

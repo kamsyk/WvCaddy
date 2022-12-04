@@ -90,7 +90,8 @@ public class CaddyItemList extends AppCompatActivity {
                 null,                           // The values for the WHERE clause
                 null,                               // don't group the rows
                 null,                               // don't filter by row groups
-                LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE + " DESC" );                               // The sort order
+                null);
+                //"datetime(" + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE + ") DESC" );                               // The sort order
 
     }
 
