@@ -41,20 +41,34 @@ public class LwMailJetClient {
     public void sendMail(String file1Path) throws Exception {
         MailjetRequest request;
         MailjetResponse response;
-        String mailSender = "kamil.sykora.ks@gmail.com";
+        String mailSender = null;
         String mailRecipients = null;
-        String mailJetApiKey = "7da4ffd781e937f9e55bb0b6861a3fee";
-        String mailJetSecretKey = "1bcf03be2202d1223ed81b19f0dcd494";
+        String mailJetApiKey = null;
+        String mailJetSecretKey = null;
 
         Cursor cursor = getVwCaddySettingCursor();
         if(cursor.getCount() > 0) {
             cursor.moveToFirst();
+            mailSender = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_SENDER));
             mailRecipients = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_RECIPIENTS));
+            mailJetApiKey = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY));
+            mailJetSecretKey = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY));
+        }
 
+        if(mailSender == null || mailSender.length() == 0) {
+            throw new Exception("Není nastaven odesílatel");
         }
 
         if(mailRecipients == null || mailRecipients.length() == 0) {
-            throw new Exception("Recipients is blank");
+            throw new Exception("Nejsou nastaveni příjemci mailu");
+        }
+
+        if(mailJetApiKey == null || mailJetApiKey.length() == 0) {
+            throw new Exception("Není zadám MailJet API Key");
+        }
+
+        if(mailJetSecretKey == null || mailJetSecretKey.length() == 0) {
+            throw new Exception("Není zadám MailJet Secret Key");
         }
 
         OkHttpClient customHttpClient = new OkHttpClient.Builder()
@@ -139,9 +153,11 @@ public class LwMailJetClient {
                                 .put(msg));
 
         response = client.post(request);
-        System.out.println(response.getStatus());
-        System.out.println(response.getData());
-
+        //System.out.println(response.getStatus());
+        //System.out.println(response.getData());
+        if(response.getStatus() != 200) {
+            throw new Exception("Při odesílání mailu došlo k chybě");
+        }
 
     }
     private Cursor getVwCaddySettingCursor() {

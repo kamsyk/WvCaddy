@@ -12,7 +12,8 @@
         android:gravity="top"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="1dp">
+        tools:layout_editor_absoluteY="1dp"
+        android:background="#eee">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,58 +82,249 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/llPwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Heslo"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+                <EditText
+                    android:id="@+id/txtPassword"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/edittext_border"
+                    android:padding="2dp"
+                    android:textColor="@color/black"
+                    android:inputType="textPassword"
+                    />
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btnSetPwd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:height="65dp"
+                    android:minHeight="65dp"
+                    android:text="Příhlásit"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_weight="0.4"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:backgroundTint="@drawable/save_button"
+                    android:layout_marginTop="15dp"
+                    android:onClick="login"/>
+
+                <Button
+                    android:id="@+id/btnPwdChange"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:height="65dp"
+                    android:minHeight="65dp"
+                    android:text="Změna hesla"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_weight="0.4"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:backgroundTint="@drawable/save_button"
+                    android:layout_marginTop="15dp"
+                    android:onClick="changePassword" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llSetPwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="10dp">
+
+            <TextView
+                android:id="@+id/tvOldPwdLabel"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Aktuální Heslo"/>
+
+            <LinearLayout
+                android:id="@+id/llOldPwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+                <EditText
+                    android:id="@+id/txtOldPassword"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/edittext_border"
+                    android:padding="2dp"
+                    android:textColor="@color/black"
+                    android:inputType="textPassword"
+                    />
+            </LinearLayout>
+
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Nové Heslo"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+                <EditText
+                    android:id="@+id/txtNewPassword"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/edittext_border"
+                    android:padding="2dp"
+                    android:textColor="@color/black"
+                    android:inputType="textPassword"
+                    />
+            </LinearLayout>
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="Nové Heslo"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+                <EditText
+                    android:id="@+id/txtNewPasswordConfirm"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/edittext_border"
+                    android:padding="2dp"
+                    android:textColor="@color/black"
+                    android:inputType="textPassword"
+                     />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <Button
+                    android:id="@+id/btnLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:height="65dp"
+                    android:minHeight="65dp"
+                    android:text="Uložit"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:layout_weight="0.4"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:backgroundTint="@drawable/save_button"
+                    android:layout_marginTop="15dp"
+                    android:onClick="setNewPassword" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:text="Mailová adresa odesílatele"/>
 
-            <EditText
-                android:id="@+id/txtSender"
-                android:layout_height="wrap_content"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:background="@drawable/edittext_border"
-                android:padding="2dp" />
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+                <EditText
+                    android:id="@+id/txtSender"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/edittext_border"
+                    android:padding="2dp"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
+
 
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="Mailové adresy příjemců (oddělé ;)"/>
+                android:text="Mailové adresy příjemců (oddělené ;)"
+                android:layout_marginTop="10dp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
             <EditText
                 android:id="@+id/txtRecipients"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:background="@drawable/edittext_border"
-                android:padding="2dp" />
+                android:padding="2dp"
+                android:textColor="@color/black"
+                 />
+            </LinearLayout>
 
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="Mailjet API Key"/>
+                android:text="Mailjet API Key"
+                android:layout_marginTop="10dp"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
             <EditText
                 android:id="@+id/txtMailjetApiKey"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:background="@drawable/edittext_border"
-                android:padding="2dp" />
+                android:padding="2dp"
+                android:textColor="@color/black"
+                 />
+            </LinearLayout>
 
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="Mailjet Private Key"/>
+                android:text="Mailjet Private Key"
+                android:layout_marginTop="10dp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
             <EditText
                 android:id="@+id/txtMailjetSecretKey"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:background="@drawable/edittext_border"
-                android:padding="2dp" />
+                android:padding="2dp"
+                android:textColor="@color/black"
+                />
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btnSave"
@@ -148,6 +340,7 @@
                 android:layout_marginRight="4dp"
                 android:backgroundTint="@drawable/save_button"
                 android:onClick="save"
+                android:layout_marginTop="15dp"
                 />
         </LinearLayout>
 

@@ -292,38 +292,38 @@ public class CaddyItemList extends AppCompatActivity {
         }
     }
 
-    class SendMailAsyncTask extends AsyncTask<Void, Integer, Boolean> {
+    class SendMailAsyncTask extends AsyncTask<Void, Integer, String> {
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected String doInBackground(Void... params) {
             try {
                 new ExportAsyncTask().exportThread();
                 new LwMailJetClient(getApplicationContext()).sendMail(fullExportPath);
 
-                return true;
+                return null;
             } catch (IOException | InterruptedException e) {
-                return false;
+                return "Generování dokumentu selhalo";
             } catch (JSONException e) {
-                return false;
+                return e.getMessage();
             } catch (MailjetException e) {
-                return false;
+                return e.getMessage();
             } catch (Exception e) {
-                return false;
+                return e.getMessage();
             }
-
         }
+
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(String result) {
             progressBar.setVisibility(View.GONE);
 
-            if(result) {
+            if(result == null) {
                 Toast.makeText(
                         getApplicationContext(),
                         "Mail byl odeslán",
                         Toast.LENGTH_SHORT).show();
             } else {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                builder1.setTitle("Došlo k chybě");
-                builder1.setMessage("Při odesílání mailu došlo k chybě");
+                builder1.setTitle("Při odesílání mailu došlo k chybě");
+                builder1.setMessage(result);
                 builder1.setCancelable(true);
                 builder1.setNeutralButton("Zavřít",
                         (DialogInterface dialog, int id) ->
