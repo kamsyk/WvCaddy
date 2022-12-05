@@ -101,30 +101,6 @@ public class LwMailJetClient {
             }
         }
 
-        /*request = new MailjetRequest(Emailv31.resource)
-                .property(Emailv31.MESSAGES, new JSONArray()
-                        .put(new JSONObject()
-                                .put(Emailv31.Message.FROM, new JSONObject()
-                                        .put("Email", mailSender)
-                                        .put("Name", "Wv Caddy"))
-                                .put(Emailv31.Message.TO, new JSONArray()
-                                        .put(new JSONObject()
-                                                .put("Email", "mailRecipients")
-                                                .put("Name", "You")))
-                                .put(Emailv31.Message.SUBJECT, "VW Caddy Test")
-                                .put(Emailv31.Message.TEXTPART, "Výpis vadných VW Caddy podsestav je v příloze.")
-                                .put(Emailv31.Message.HTMLPART, "Výpis vadných VW Caddy podsestav je v příloze.")
-                                .put(Emailv31.Message.ATTACHMENTS,
-                                        new JSONArray()
-                                                .put(new JSONObject().put("ContentType", "application/csv")
-                                                        .put("Filename", "abc.csv")
-                                                        .put("Base64Content", base64))
-                                                    .put(new JSONObject().put("ContentType", "application/csv")
-                                                            .put("Filename", "abc1.csv")
-                                                            .put("Base64Content", base64))
-                                )
-                        ));*/
-
         String[] strFile1NameItems = file1Path.split("/");
         String strFile1Name = strFile1NameItems[strFile1NameItems.length - 1];
 
@@ -132,7 +108,7 @@ public class LwMailJetClient {
         msg.put(Emailv31.Message.FROM, new JSONObject()
                 .put("Email", mailSender)
                 .put("Name", "Wv Caddy"));
-        msg.put(Emailv31.Message.SUBJECT, "VW Caddy Test");
+        msg.put(Emailv31.Message.SUBJECT, "VW Caddy Vadné Podsestavy");
         msg.put(Emailv31.Message.TEXTPART, "Výpis vadných VW Caddy podsestav je v příloze.");
         msg.put(Emailv31.Message.HTMLPART, "Výpis vadných VW Caddy podsestav je v příloze.");
         msg.put(Emailv31.Message.ATTACHMENTS,
