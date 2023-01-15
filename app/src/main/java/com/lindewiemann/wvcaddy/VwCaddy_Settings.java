@@ -38,8 +38,8 @@ public class VwCaddy_Settings extends AppCompatActivity {
             cursor.moveToFirst();
             ((EditText) findViewById(R.id.txtSender)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_SENDER)));
             ((EditText) findViewById(R.id.txtRecipients)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_RECIPIENTS)));
-            ((EditText) findViewById(R.id.txtMailjetApiKey)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY)));
-            ((EditText) findViewById(R.id.txtMailjetSecretKey)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY)));
+            //((EditText) findViewById(R.id.txtMailjetApiKey)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY)));
+            //((EditText) findViewById(R.id.txtMailjetSecretKey)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY)));
             ((EditText) findViewById(R.id.txtGMailAppPwd)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD)));
             _pwd = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD));
         }
@@ -208,8 +208,8 @@ public class VwCaddy_Settings extends AppCompatActivity {
         try {
             String strSender = ((EditText) findViewById(R.id.txtSender)).getText().toString();
             String strRecipients = ((EditText) findViewById(R.id.txtRecipients)).getText().toString();
-            String strMailjetApiKey = ((EditText) findViewById(R.id.txtMailjetApiKey)).getText().toString();
-            String strMailjetSecretKey = ((EditText) findViewById(R.id.txtMailjetSecretKey)).getText().toString();
+            //String strMailjetApiKey = ((EditText) findViewById(R.id.txtMailjetApiKey)).getText().toString();
+            //String strMailjetSecretKey = ((EditText) findViewById(R.id.txtMailjetSecretKey)).getText().toString();
             String strGMailAppPwd = ((EditText) findViewById(R.id.txtGMailAppPwd)).getText().toString();
 
             Cursor cursor = getVwCaddyCursor();
@@ -220,8 +220,9 @@ public class VwCaddy_Settings extends AppCompatActivity {
                 ContentValues values = new ContentValues();
                 values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_SENDER, strSender);
                 values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_RECIPIENTS, strRecipients);
-                values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY, strMailjetApiKey);
-                values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY, strMailjetSecretKey);
+                //values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY, strMailjetApiKey);
+                //values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY, strMailjetSecretKey);
+                values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY, strGMailAppPwd);
 
 
                 // Insert the new row, returning the primary key value of the new row
@@ -236,8 +237,9 @@ public class VwCaddy_Settings extends AppCompatActivity {
                 // along with its key and value pair.
                 values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_SENDER, strSender);
                 values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_RECIPIENTS, strRecipients);
-                values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY, strMailjetApiKey);
-                values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY, strMailjetSecretKey);
+                //values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY, strMailjetApiKey);
+                //values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY, strMailjetSecretKey);
+                values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD, strGMailAppPwd);
 
                 // on below line we are calling a update method to update our database and passing our values.
                 // and we are comparing it with name of our course which is stored in original name variable.

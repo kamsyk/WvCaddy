@@ -25,6 +25,8 @@ import javax.mail.internet.MimeMultipart;
 public class GMailApi {
     ContainerDbHelper _dbHelper = null;
     Context _appContext = null;
+    String _mailSender = null;
+    String _gmailAppPwd = null;
 
     public GMailApi(Context appContext) {
         _appContext = appContext;
@@ -32,17 +34,17 @@ public class GMailApi {
     }
 
     public void sendGMail(String file1Path) throws Exception {
-        String mailSender = null;
         String mailRecipients = null;
 
         Cursor cursor = getVwCaddySettingCursor();
         if(cursor.getCount() > 0) {
             cursor.moveToFirst();
-            mailSender = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_SENDER));
+            _mailSender = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_SENDER));
             mailRecipients = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_RECIPIENTS));
+            _gmailAppPwd = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD));
         }
 
-        if(mailSender == null || mailSender.length() == 0) {
+        if(_mailSender == null || _mailSender.length() == 0) {
             throw new Exception("Není nastaven odesílatel");
         }
 
@@ -65,7 +67,7 @@ public class GMailApi {
                 new javax.mail.Authenticator() {
                     //Authenticating the password
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("kamsykde@gmail.com", "wizdkrafrjdtovev");
+                        return new PasswordAuthentication(_mailSender, _gmailAppPwd);
                     }
                 });
 
