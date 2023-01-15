@@ -48,9 +48,10 @@ dependencies {
     implementation files('libs\\mailjet-client-5.2.1.jar')
     implementation files('libs\\okhttp-3.9.0.jar')
     implementation files('libs\\okio-1.13.0.jar')
-    implementation files('libs\\javax.mail.jar')
     implementation files('libs\\commons-codec-1.15.jar')
-    implementation files('libs\\activation-1.1.1.jar')
+    implementation files('libs\\activation.jar')
+    implementation files('libs\\additionnal.jar')
+    implementation files('libs\\mail.jar')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'

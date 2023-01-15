@@ -123,6 +123,8 @@ public class CaddyItemList extends AppCompatActivity {
             if (isExportFolderExist(v.getContext())) {
                 progressBar = findViewById(R.id.pgbExport);
                 new SendMailAsyncTask().execute();
+
+
             }
         } catch (Exception e) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
@@ -297,17 +299,16 @@ public class CaddyItemList extends AppCompatActivity {
         protected String doInBackground(Void... params) {
             try {
                 new ExportAsyncTask().exportThread();
-                new LwMailJetClient(getApplicationContext()).sendMail(fullExportPath);
+                //new LwMailJetClient(getApplicationContext()).sendMail(fullExportPath);
+
+                //Send GMail
+                new GMailApi(getApplicationContext()).sendGMail();
 
                 return null;
             } catch (IOException | InterruptedException e) {
                 return "Generování dokumentu selhalo";
-            } catch (JSONException e) {
-                return e.getMessage();
-            } catch (MailjetException e) {
-                return e.getMessage();
             } catch (Exception e) {
-                return e.getMessage();
+                return "Odesílání dokumentu selhalo";
             }
         }
 
