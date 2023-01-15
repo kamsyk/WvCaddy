@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,6 +42,7 @@ public class CaddyItemList extends AppCompatActivity {
     File folder = null;
     String fullExportPath;
     Context context = this;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -302,7 +304,7 @@ public class CaddyItemList extends AppCompatActivity {
                 //new LwMailJetClient(getApplicationContext()).sendMail(fullExportPath);
 
                 //Send GMail
-                new GMailApi(getApplicationContext()).sendGMail();
+                new GMailApi(getApplicationContext()).sendGMail(fullExportPath);
 
                 return null;
             } catch (IOException | InterruptedException e) {
@@ -315,6 +317,7 @@ public class CaddyItemList extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             progressBar.setVisibility(View.GONE);
+            mProgressDialog.dismiss();
 
             if(result == null) {
                 Toast.makeText(
@@ -339,6 +342,7 @@ public class CaddyItemList extends AppCompatActivity {
         protected void onPreExecute() {
 
             progressBar.setProgress(0);
+            mProgressDialog = ProgressDialog.show(context,"Odeslání mail", "Probíhá odesílání mailu ...",false,false);
         }
         @Override
         protected void onProgressUpdate(Integer... values) {

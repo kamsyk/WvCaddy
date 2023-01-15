@@ -40,6 +40,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
             ((EditText) findViewById(R.id.txtRecipients)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_RECIPIENTS)));
             ((EditText) findViewById(R.id.txtMailjetApiKey)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY)));
             ((EditText) findViewById(R.id.txtMailjetSecretKey)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY)));
+            ((EditText) findViewById(R.id.txtGMailAppPwd)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD)));
             _pwd = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD));
         }
 
@@ -209,6 +210,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
             String strRecipients = ((EditText) findViewById(R.id.txtRecipients)).getText().toString();
             String strMailjetApiKey = ((EditText) findViewById(R.id.txtMailjetApiKey)).getText().toString();
             String strMailjetSecretKey = ((EditText) findViewById(R.id.txtMailjetSecretKey)).getText().toString();
+            String strGMailAppPwd = ((EditText) findViewById(R.id.txtGMailAppPwd)).getText().toString();
 
             Cursor cursor = getVwCaddyCursor();
             if (cursor.getCount() == 0) {

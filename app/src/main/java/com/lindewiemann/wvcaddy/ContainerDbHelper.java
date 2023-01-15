@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class ContainerDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "LwWvCaddy.db";
 
     private static final String SQL_CREATE_ENTRIES_CADDY =
@@ -72,6 +72,14 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                             + ")";
             db.execSQL(sql);
         }
+
+        if(DATABASE_VERSION < 4) {
+            String sql = "ALTER TABLE " + LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME +
+                    "  ADD " + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD  + " TEXT";
+
+            db.execSQL(sql);
+        }
+
        /*String sql =
                     "CREATE TABLE IF NOT EXISTS " + LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME + " ("
                             + LwVwCaddyDbDict.WvCaddySubcodeEntry._ID + " INTEGER PRIMARY KEY,"

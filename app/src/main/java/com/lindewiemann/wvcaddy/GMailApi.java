@@ -13,11 +13,14 @@ import java.util.Properties;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 public class GMailApi {
     ContainerDbHelper _dbHelper = null;
@@ -28,7 +31,7 @@ public class GMailApi {
         _dbHelper = new ContainerDbHelper(_appContext);
     }
 
-    public void sendGMail() throws Exception {
+    public void sendGMail(String file1Path) throws Exception {
         String mailSender = null;
         String mailRecipients = null;
 
@@ -81,8 +84,25 @@ public class GMailApi {
 
             //Adding subject
             mm.setSubject("VW Caddy Vadné Podsestavy");
+
             //Adding message
-            mm.setText("Výpis vadných VW Caddy podsestav je v příloze.");
+            //mm.setText("Výpis vadných VW Caddy podsestav je v příloze.");
+            Multipart emailContent = new MimeMultipart();
+
+            //Text body part
+            MimeBodyPart textBodyPart = new MimeBodyPart();
+            textBodyPart.setText("Výpis vadných VW Caddy podsestav je v příloze.");
+
+            //Attachment body part.
+            MimeBodyPart csvAttachment = new MimeBodyPart();
+            csvAttachment.attachFile(file1Path);
+
+            //Attach body parts
+            emailContent.addBodyPart(textBodyPart);
+            emailContent.addBodyPart(csvAttachment);
+
+            //Attach multipart to message
+            mm.setContent(emailContent);
 
             //Sending email
             Transport.send(mm);

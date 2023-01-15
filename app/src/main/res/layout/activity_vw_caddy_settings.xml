@@ -326,6 +326,26 @@
                 />
             </LinearLayout>
 
+            <TextView
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:text="G Mail Application Password"
+                android:layout_marginTop="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white">
+                <EditText
+                    android:id="@+id/txtGMailAppPwd"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/edittext_border"
+                    android:padding="2dp"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="wrap_content"
