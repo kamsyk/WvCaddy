@@ -39,18 +39,22 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_RECIPIENTS + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY + " TEXT,"
-                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD + " TEXT"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD  + " TEXT"
                     + ")";
 
     public ContainerDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
+
+    @Override
     public void onCreate(SQLiteDatabase db) {
 
         db.execSQL(SQL_CREATE_ENTRIES_CADDY);
         db.execSQL(SQL_CREATE_ENTRIES_CADDY_SUBCODE);
         db.execSQL(SQL_CREATE_ENTRIES_CADDY_SETTINGS);
     }
+
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         DbUpgrade(db);
     }
@@ -60,7 +64,7 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
     }
 
     private void DbUpgrade(SQLiteDatabase db) {
-        if(DATABASE_VERSION < 3) {
+        /*if(DATABASE_VERSION < 3) {
             String sql =
                     "CREATE TABLE IF NOT EXISTS " + LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME + " ("
                             + LwVwCaddyDbDict.WvCaddySettings._ID + " INTEGER PRIMARY KEY,"
@@ -78,7 +82,7 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                     "  ADD " + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD  + " TEXT";
 
             db.execSQL(sql);
-        }
+        }*/
 
        /*String sql =
                     "CREATE TABLE IF NOT EXISTS " + LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME + " ("
