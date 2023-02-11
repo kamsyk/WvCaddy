@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'com.lindewiemann.wvcaddy'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.lindewiemann.wvcaddy"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -55,4 +55,9 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    def work_version = "2.8.0"
+
+    // (Java only)
+    implementation "androidx.work:work-runtime:$work_version"
+
 }

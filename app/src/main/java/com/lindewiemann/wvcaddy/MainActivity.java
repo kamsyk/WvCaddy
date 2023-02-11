@@ -9,6 +9,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.Constraints;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -27,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private final String SELECTED_IMG_BUTTON_ID = "SelectedimgButtonId";
@@ -35,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private final String CODE_ID = "Code";
     private final String SUBCODE_ID = "SubCode";
     private final String LEFT_RIGHT = "LeftRight";
+    private final String WORKER_TAG = "MailWorkerTag";
 
     ContainerDbHelper dbHelper = new ContainerDbHelper(this);
    // private AppBarConfiguration appBarConfiguration;
@@ -46,12 +55,14 @@ public class MainActivity extends AppCompatActivity {
     private int _btnPicId = -1;
     private int _btnShiftId = -1;
     private int _iLeftRight = -1;
+    private WorkRequest _mailWorkRequest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //loadInit();
+        setMailWorker();
     }
 
     @Override
@@ -94,6 +105,32 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    private void setMailWorker() {
+        Constraints constraints =
+                new Constraints.Builder()
+                        .setRequiredNetworkType(NetworkType.CONNECTED)
+                        .build();
+
+        //Imediate run
+        /*_mailWorkRequest = new OneTimeWorkRequest.Builder(MailWorker.class)
+                .build();*/
+        //periodic run
+        _mailWorkRequest = new PeriodicWorkRequest.Builder(
+                MailWorker.class,
+                16*60*1000L, //15 mins is minimum
+                TimeUnit.MILLISECONDS)
+                //5,
+                //TimeUnit.MINUTES)
+                .addTag(WORKER_TAG)
+                .setConstraints(constraints)
+                .build();
+
+
+        WorkManager
+                .getInstance(this)
+                .enqueue(_mailWorkRequest);
     }
 
     private void loadInit() {

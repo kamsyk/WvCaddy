@@ -101,10 +101,11 @@ public class CaddyItemList extends AppCompatActivity {
     public void exportToFile(View v) {
         try {
             progressBar = findViewById(R.id.pgbExport);
-            if (isExportFolderExist(v.getContext())) {
+            /*if (isExportFolderExist(v.getContext())) {
                 progressBar.setVisibility(View.VISIBLE);
                 new ExportAsyncTask().execute();
-            }
+            }*/
+            new ItemListExport(v.getContext(), false).exportToFile();
         } catch(Exception ex) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
             builder1.setTitle("Došlo k chybě");
