@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private int _btnPicId = -1;
     private int _btnShiftId = -1;
     private int _iLeftRight = -1;
-    private WorkRequest _mailWorkRequest;
+    private PeriodicWorkRequest _mailWorkRequest;
 
 
     @Override
@@ -108,10 +108,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setMailWorker() {
-        Constraints constraints =
+        /*Constraints constraints =
                 new Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build();
+                        .build();*/
 
         //Imediate run
         /*_mailWorkRequest = new OneTimeWorkRequest.Builder(MailWorker.class)
@@ -124,13 +124,14 @@ public class MainActivity extends AppCompatActivity {
                 //5,
                 //TimeUnit.MINUTES)
                 .addTag(WORKER_TAG)
-                .setConstraints(constraints)
+                //.setConstraints(constraints)
                 .build();
 
 
         WorkManager
                 .getInstance(this)
-                .enqueue(_mailWorkRequest);
+                .enqueueUniquePeriodicWork(WORKER_TAG, ExistingPeriodicWorkPolicy.KEEP, _mailWorkRequest);
+
     }
 
     private void loadInit() {

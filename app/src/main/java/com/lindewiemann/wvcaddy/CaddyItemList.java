@@ -105,7 +105,10 @@ public class CaddyItemList extends AppCompatActivity {
                 progressBar.setVisibility(View.VISIBLE);
                 new ExportAsyncTask().execute();
             }*/
-            new ItemListExport(v.getContext(), false).exportToFile();
+            new ItemListExport(
+                    v.getContext(),
+                    false,
+                    progressBar).exportToFile();
         } catch(Exception ex) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
             builder1.setTitle("Došlo k chybě");
@@ -125,8 +128,15 @@ public class CaddyItemList extends AppCompatActivity {
         try {
             if (isExportFolderExist(v.getContext())) {
                 progressBar = findViewById(R.id.pgbExport);
-                new SendMailAsyncTask().execute();
+                /*new SendMailAsyncTask().execute();
+                if(mProgressDialog == null) {
+                    mProgressDialog = ProgressDialog.show(context, "Odeslání mail", "Probíhá odesílání mailu ...", false, false);
+                }*/
 
+                new ItemListMailer(
+                        v.getContext(),
+                        false,
+                        progressBar).sendMail();
 
             }
         } catch (Exception e) {

@@ -25,20 +25,26 @@ public class ItemListExport {
     private Context _context = null;
     private boolean _isAuto = false;
     private LinearProgressIndicator _progressBar = null;
-    File _folder = null;
-    String _fullExportPath;
+    private File _folder = null;
+    private String _fullExportPath;
     private boolean _isResultOk = false;
-    ContainerDbHelper _dbHelper = null;
-    //private ProgressDialog _progressDialog;
+    private ContainerDbHelper _dbHelper = null;
+    private ProgressDialog _progressDialog;
+
 
     public String getFullExportPath() {
         return _fullExportPath;
     }
 
-    public ItemListExport(Context context, boolean isAuto) {
+    public ItemListExport(
+            Context context,
+            boolean isAuto,
+            LinearProgressIndicator progressBar) {
         _context = context;
         _isAuto = isAuto;
+        _progressBar = progressBar;
         _dbHelper = new ContainerDbHelper(_context);
+
     }
 
     public void exportToFile() {
@@ -52,8 +58,9 @@ public class ItemListExport {
 
 
         } catch(Exception ex) {
-            throw ex;
-            /*if(!_isAuto) {
+            if(_isAuto) {
+                throw ex;
+            } else {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(_context);
                 builder1.setTitle("Došlo k chybě");
                 builder1.setMessage("Export dat selhal");
@@ -66,13 +73,12 @@ public class ItemListExport {
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
             }
-
-            return null;*/
         }
     }
 
-    private boolean isExportFolderExist(Context context) {
-        _folder = context.getExternalFilesDir(null);
+    public boolean isExportFolderExist(Context context) {
+        _folder = getExportRootFolder(context);
+        //_folder = context.getExternalFilesDir(null);
 
         boolean isFolderExist = true;
         if (!_folder.exists()) {
@@ -97,6 +103,10 @@ public class ItemListExport {
         return true;
     }
 
+    private File getExportRootFolder(Context context) {
+        return context.getExternalFilesDir(null);
+    }
+
     private Cursor getVwCaddyCursor() {
 
         SQLiteDatabase db = _dbHelper.getReadableDatabase();
@@ -113,7 +123,7 @@ public class ItemListExport {
 
     }
 
-    class ExportAsyncTask extends AsyncTask<Void, Integer, Boolean> {
+    public class ExportAsyncTask extends AsyncTask<Void, Integer, Boolean> {
         String fileName = null;
 
         public ExportAsyncTask() {
@@ -135,6 +145,11 @@ public class ItemListExport {
             if(_progressBar != null) {
                 _progressBar.setVisibility(View.GONE);
             }
+
+            if(_progressDialog != null) {
+                _progressDialog.dismiss();
+            }
+
             if(_isAuto) {
                 _isResultOk = result;
             } else {
@@ -170,6 +185,9 @@ public class ItemListExport {
             if(_progressBar != null) {
                 _progressBar.setProgress(0);
             }
+            /*if(!_isAuto) {
+                _progressDialog = ProgressDialog.show(_context, "Generování souboru", "Probíhá generování souboru ...", false, false);
+            }*/
         }
         @Override
         protected void onProgressUpdate(Integer... values) {
@@ -186,6 +204,9 @@ public class ItemListExport {
                 String strDate = dateFormat.format(date);
 
                 fileName = "VwCaddyFull" + strDate + ".csv";
+                if(_folder == null) {
+                    _folder = getExportRootFolder(_context);
+                }
                 File exportFile = new File(_folder, fileName);
                 exportFile.createNewFile();
 
