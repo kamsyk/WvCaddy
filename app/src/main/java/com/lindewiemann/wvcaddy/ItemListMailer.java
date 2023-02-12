@@ -34,7 +34,7 @@ public class ItemListMailer {
             if (new ItemListExport(
                     _context,
                     _isAuto,
-                    _progressBar).isExportFolderExist(_context)) {
+                    _progressBar).isExportFolderExist()) {
                 new ItemListMailer.SendMailAsyncTask().execute();
             }
         } catch (Exception e) {

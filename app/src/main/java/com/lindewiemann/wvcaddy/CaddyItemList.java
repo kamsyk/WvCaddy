@@ -126,7 +126,7 @@ public class CaddyItemList extends AppCompatActivity {
 
     public void sendMail(View v) {
         try {
-            if (isExportFolderExist(v.getContext())) {
+            if (new ItemListExport(v.getContext(), false, null).isExportFolderExist()) {
                 progressBar = findViewById(R.id.pgbExport);
                 /*new SendMailAsyncTask().execute();
                 if(mProgressDialog == null) {
@@ -155,7 +155,7 @@ public class CaddyItemList extends AppCompatActivity {
     }
 
 
-    private boolean isExportFolderExist(Context context) {
+    /*private boolean isExportFolderExist(Context context) {
         folder = context.getExternalFilesDir(null);
 
         boolean isFolderExist = true;
@@ -179,9 +179,9 @@ public class CaddyItemList extends AppCompatActivity {
         }
 
         return true;
-    }
+    }*/
 
-
+/*
     class ExportAsyncTask extends AsyncTask<Void, Integer, Boolean> {
         String fileName = null;
 
@@ -305,8 +305,8 @@ public class CaddyItemList extends AppCompatActivity {
             return exportLine;
 
         }
-    }
-
+    }*/
+/*
     class SendMailAsyncTask extends AsyncTask<Void, Integer, String> {
         @Override
         protected String doInBackground(Void... params) {
@@ -360,5 +360,5 @@ public class CaddyItemList extends AppCompatActivity {
             //Log.d("Progress", String.valueOf(values[0]));
             progressBar.setProgress(values[0]);
         }
-    }
+    }*/
 }

@@ -335,7 +335,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
     private void setMailWorker() {
         PeriodicWorkRequest mailWorkRequest = new PeriodicWorkRequest.Builder(
                 MailWorker.class,
-                15*60*1000L, //15 mins is minimum
+                30*60*1000L, //15 mins is minimum
                 TimeUnit.MILLISECONDS)
                 .addTag(WORKER_TAG)
                 .build();

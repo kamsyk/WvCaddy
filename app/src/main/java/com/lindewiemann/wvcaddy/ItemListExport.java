@@ -49,7 +49,7 @@ public class ItemListExport {
 
     public void exportToFile() {
         try {
-            if (isExportFolderExist(_context)) {
+            if (isExportFolderExist()) {
                 if(_progressBar != null) {
                     _progressBar.setVisibility(View.VISIBLE);
                 }
@@ -76,8 +76,8 @@ public class ItemListExport {
         }
     }
 
-    public boolean isExportFolderExist(Context context) {
-        _folder = getExportRootFolder(context);
+    public boolean isExportFolderExist() {
+        _folder = getExportRootFolder(_context);
         //_folder = context.getExternalFilesDir(null);
 
         boolean isFolderExist = true;
