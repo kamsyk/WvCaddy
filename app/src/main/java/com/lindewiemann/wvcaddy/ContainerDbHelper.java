@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class ContainerDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 6;
     public static final String DATABASE_NAME = "LwWvCaddy.db";
 
     private static final String SQL_CREATE_ENTRIES_CADDY =
@@ -40,7 +40,9 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD + " TEXT,"
-                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD  + " TEXT"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD  + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR + " INTEGER,"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE + " TEXT"
                     + ")";
 
     public ContainerDbHelper(Context context) {
@@ -95,6 +97,24 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                             + ")";
             db.execSQL(sql);
         */
+
+        if(DATABASE_VERSION < 5) {
+            if(!IsExistsColumnInTable(db, LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR)) {
+                String sql = "ALTER TABLE " + LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME +
+                        "  ADD " + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR + " INTEGER";
+
+                db.execSQL(sql);
+            }
+        }
+
+        if(DATABASE_VERSION < 7) {
+            if(!IsExistsColumnInTable(db, LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE)) {
+                String sql = "ALTER TABLE " + LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME +
+                        "  ADD " + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE + " TEXT";
+
+                db.execSQL(sql);
+            }
+        }
     }
 
     private boolean IsExistsColumnInTable(SQLiteDatabase lwVwDb, String lwWvTable, String columnToCheck) {

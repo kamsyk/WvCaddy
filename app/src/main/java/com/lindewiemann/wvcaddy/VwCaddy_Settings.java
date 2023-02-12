@@ -1,6 +1,9 @@
 package com.lindewiemann.wvcaddy;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import android.app.AlertDialog;
 import android.content.ContentValues;
@@ -11,17 +14,25 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 public class VwCaddy_Settings extends AppCompatActivity {
+    private final String WORKER_TAG = "MailWorkerTag";
 
     ContainerDbHelper dbHelper = new ContainerDbHelper(this);
     boolean _isAuthorized = false;
     String _pwd = null;
+    private int _origHour = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +45,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
 
     private void init() {
         Cursor cursor = getVwCaddyCursor();
+        int iHour = 0;
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             ((EditText) findViewById(R.id.txtSender)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_SENDER)));
@@ -42,9 +54,11 @@ public class VwCaddy_Settings extends AppCompatActivity {
             //((EditText) findViewById(R.id.txtMailjetSecretKey)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY)));
             ((EditText) findViewById(R.id.txtGMailAppPwd)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD)));
             _pwd = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD));
+            iHour = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR));
+            _origHour = iHour;
         }
 
-        if(_pwd == null || _pwd.trim().length()==0) {
+        if (_pwd == null || _pwd.trim().length() == 0) {
             LinearLayout llPwd = findViewById(R.id.llPwd);
             llPwd.setVisibility(View.GONE);
             LinearLayout llOldPwd = findViewById(R.id.llOldPwd);
@@ -59,6 +73,23 @@ public class VwCaddy_Settings extends AppCompatActivity {
             llSetPwd.setVisibility(View.GONE);
 
         }
+
+        List<String> hours = new ArrayList<String>();
+        hours.add("Neodesílat");
+        for (int i = 1; i < 25; i++) {
+            hours.add(String.valueOf(i) + " hod.");
+        }
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, hours);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        final Spinner spinner = (Spinner) findViewById(R.id.spinHour);
+        spinner.setAdapter(dataAdapter);
+        spinner.setSelection(iHour);
     }
 
     public void login(View view) {
@@ -211,6 +242,8 @@ public class VwCaddy_Settings extends AppCompatActivity {
             //String strMailjetApiKey = ((EditText) findViewById(R.id.txtMailjetApiKey)).getText().toString();
             //String strMailjetSecretKey = ((EditText) findViewById(R.id.txtMailjetSecretKey)).getText().toString();
             String strGMailAppPwd = ((EditText) findViewById(R.id.txtGMailAppPwd)).getText().toString();
+            final Spinner spinner = (Spinner) findViewById(R.id.spinHour);
+            int iHour = spinner.getSelectedItemPosition();
 
             Cursor cursor = getVwCaddyCursor();
             if (cursor.getCount() == 0) {
@@ -223,7 +256,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
                 //values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY, strMailjetApiKey);
                 //values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY, strMailjetSecretKey);
                 values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY, strGMailAppPwd);
-
+                values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR, iHour);
 
                 // Insert the new row, returning the primary key value of the new row
                 long newRowId = db.insert(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, null, values);
@@ -233,19 +266,31 @@ public class VwCaddy_Settings extends AppCompatActivity {
                 SQLiteDatabase db = dbHelper.getWritableDatabase();
                 ContentValues values = new ContentValues();
 
-                // on below line we are passing all values
-                // along with its key and value pair.
+                String strDateNull = null;
                 values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_SENDER, strSender);
                 values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_RECIPIENTS, strRecipients);
                 //values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_API_KEY, strMailjetApiKey);
                 //values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY, strMailjetSecretKey);
                 values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD, strGMailAppPwd);
+                values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR, iHour);
+                if(iHour != _origHour) {
+                    values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE, strDateNull);
+                }
 
                 // on below line we are calling a update method to update our database and passing our values.
                 // and we are comparing it with name of our course which is stored in original name variable.
                 db.update(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, values, null, null);
                 //db.close();
             }
+
+            if(iHour > 0)  {
+                if(_origHour == 0) {
+                    setMailWorker();
+                }
+            } else {
+                stopMailWorker();
+            }
+            _origHour = iHour;
 
             Toast.makeText(
                     getApplicationContext(),
@@ -285,5 +330,23 @@ public class VwCaddy_Settings extends AppCompatActivity {
     public void displayHome(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private void setMailWorker() {
+        PeriodicWorkRequest mailWorkRequest = new PeriodicWorkRequest.Builder(
+                MailWorker.class,
+                15*60*1000L, //15 mins is minimum
+                TimeUnit.MILLISECONDS)
+                .addTag(WORKER_TAG)
+                .build();
+
+        WorkManager
+                .getInstance(this)
+                .enqueueUniquePeriodicWork(WORKER_TAG, ExistingPeriodicWorkPolicy.KEEP, mailWorkRequest);
+
+    }
+
+    private void stopMailWorker() {
+        WorkManager.getInstance(this).cancelAllWorkByTag(WORKER_TAG);
     }
 }
