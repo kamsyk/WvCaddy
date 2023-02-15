@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -110,10 +111,12 @@ public class MainActivity extends AppCompatActivity {
     /*private void setMailWorker() {
         _mailWorkRequest = new PeriodicWorkRequest.Builder(
                 MailWorker.class,
-                60*60*1000L, //15 mins is minimum
+                16*60*1000L, //15 mins is minimum
                 TimeUnit.MILLISECONDS)
                 .addTag(WORKER_TAG)
                 .build();
+
+        WorkManager.getInstance(this).cancelAllWorkByTag(WORKER_TAG);
 
         WorkManager
                 .getInstance(this)

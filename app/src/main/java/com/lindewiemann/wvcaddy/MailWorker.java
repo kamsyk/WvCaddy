@@ -1,11 +1,15 @@
 package com.lindewiemann.wvcaddy;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
@@ -35,8 +39,9 @@ public class MailWorker extends Worker {
     public Result doWork() {
         getSettings();
 
+        boolean isSend = true;
         if(_sendHour == Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
-            boolean isSend = true;
+
             if (_lastSentDate != null) {
 
                 GregorianCalendar nowDate = new GregorianCalendar();
@@ -53,17 +58,22 @@ public class MailWorker extends Worker {
                 }
             }
 
-            if (isSend) {
-                new ItemListMailer(
-                        getApplicationContext(),
-                        true,
-                        null
-                ).sendMail();
 
-                setSentStamp();
-            }
+        } else {
+            isSend = false;
         }
 
+        isSend = true;
+
+        if (isSend) {
+            new ItemListMailer(
+                    getApplicationContext(),
+                    true,
+                    null
+            ).sendMail();
+
+            setSentStamp();
+        }
 
         return Result.success();
 
@@ -86,12 +96,6 @@ public class MailWorker extends Worker {
     }
 
     private void setSentStamp() {
-        //Date date = new Date();
-
-        /*String dateFormatted
-                = formattedDate.format(
-                gregorianCalendarDate.getTime());*/
-
         GregorianCalendar gc = new GregorianCalendar();
         SimpleDateFormat spf=new SimpleDateFormat(_dateFormat);
         spf= new SimpleDateFormat(_dateFormat);
