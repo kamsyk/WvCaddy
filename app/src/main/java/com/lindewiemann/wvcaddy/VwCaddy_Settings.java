@@ -5,7 +5,9 @@ import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -283,13 +286,19 @@ public class VwCaddy_Settings extends AppCompatActivity {
                 //db.close();
             }
 
-            if(iHour > 0)  {
+            if(iHour > 0) {
+                startMailAlert(iHour);
+            } else {
+                stopMailWorker();
+            }
+
+            /*if(iHour > 0)  {
                 if(_origHour == 0) {
                     setMailWorker();
                 }
             } else {
                 stopMailWorker();
-            }
+            }*/
             _origHour = iHour;
 
             Toast.makeText(
@@ -348,5 +357,37 @@ public class VwCaddy_Settings extends AppCompatActivity {
 
     private void stopMailWorker() {
         WorkManager.getInstance(this).cancelAllWorkByTag(WORKER_TAG);
+        WorkManager.getInstance(this).cancelAllWorkByTag(MailBroadcastReceiver.WORKER_TAG);
+
+    }
+
+    public void startMailAlert(int iHour){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, iHour);
+        calendar.set(Calendar.MINUTE, 00);
+
+        Intent intent = new Intent(this, MailBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this.getApplicationContext(),
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE);
+
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        alarmManager.setInexactRepeating(
+                AlarmManager.RTC_WAKEUP,
+                calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY,
+                pendingIntent);
+
+        /*PendingIntent pi = PendingIntent.getService(context, 0,
+                new Intent(context, MyClass.class),PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pi);*/
+
     }
 }

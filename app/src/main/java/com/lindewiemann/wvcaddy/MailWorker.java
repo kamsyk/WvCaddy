@@ -39,7 +39,7 @@ public class MailWorker extends Worker {
     public Result doWork() {
         getSettings();
 
-        boolean isSend = true;
+        /*boolean isSend = true;
         if(_sendHour == Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
 
             if (_lastSentDate != null) {
@@ -61,11 +61,11 @@ public class MailWorker extends Worker {
 
         } else {
             isSend = false;
-        }
+        }*/
 
-        isSend = true;
+        //isSend = true;
 
-        if (isSend) {
+        //if (isSend) {
             new ItemListMailer(
                     getApplicationContext(),
                     true,
@@ -73,7 +73,7 @@ public class MailWorker extends Worker {
             ).sendMail();
 
             setSentStamp();
-        }
+        //}
 
         return Result.success();
 
