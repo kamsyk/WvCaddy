@@ -288,6 +288,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
 
             if(iHour > 0) {
                 startMailAlert(iHour);
+                setMailWorker();
             } else {
                 stopMailWorker();
             }

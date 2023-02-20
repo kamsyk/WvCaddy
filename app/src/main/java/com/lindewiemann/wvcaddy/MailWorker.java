@@ -39,33 +39,34 @@ public class MailWorker extends Worker {
     public Result doWork() {
         getSettings();
 
-        /*boolean isSend = true;
+        GregorianCalendar nowDate = new GregorianCalendar();
+        int year = nowDate.get(Calendar.YEAR);
+        int month = nowDate.get(Calendar.MONTH);
+        int day = nowDate.get(Calendar.DAY_OF_MONTH);
+
+        GregorianCalendar refDate = new GregorianCalendar(year, month, day, _sendHour, 0, 0);
+
+        boolean isSend = true;
         if(_sendHour == Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
-
             if (_lastSentDate != null) {
-
-                GregorianCalendar nowDate = new GregorianCalendar();
-                int year = nowDate.get(Calendar.YEAR);
-                int month = nowDate.get(Calendar.MONTH);
-                int day = nowDate.get(Calendar.DAY_OF_MONTH);
-                //int hour = nowDate.get(Calendar.HOUR_OF_DAY);
-                //int minute = nowDate.get(Calendar.MINUTE);
-                //int second = nowDate.get(Calendar.SECOND);
-
-                GregorianCalendar refDate = new GregorianCalendar(year, month, day, _sendHour, 0, 0);
                 if(_lastSentDate.after(refDate)) {
                     isSend =  false;
                 }
             }
-
-
         } else {
-            isSend = false;
-        }*/
+            if(_lastSentDate != null) {
+                GregorianCalendar dayCal = _lastSentDate;
+                dayCal.add(Calendar.DATE, 1);
+
+                if(dayCal.after(new GregorianCalendar())) {
+                    isSend = false;
+                }
+            }
+        }
 
         //isSend = true;
 
-        //if (isSend) {
+        if (isSend) {
             new ItemListMailer(
                     getApplicationContext(),
                     true,
@@ -73,7 +74,7 @@ public class MailWorker extends Worker {
             ).sendMail();
 
             setSentStamp();
-        //}
+        }
 
         return Result.success();
 
@@ -105,12 +106,15 @@ public class MailWorker extends Worker {
                 gc.getTime());
 
         Cursor cursor = getVwCaddyCursor();
-        cursor.moveToFirst();
         SQLiteDatabase db = _dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE, strDate);
-        db.update(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, values, null, null);
+        if (cursor.getCount() == 0) {
+            db.insert(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, null, values);
+        } else {
+            cursor.moveToFirst();
+            db.update(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, values, null, null);
+        }
     }
 
     private Cursor getVwCaddyCursor() {
@@ -127,6 +131,7 @@ public class MailWorker extends Worker {
                 null);                               // The sort order
 
     }
+
 
     private GregorianCalendar stringToDate(String aDate,String aFormat) {
 
