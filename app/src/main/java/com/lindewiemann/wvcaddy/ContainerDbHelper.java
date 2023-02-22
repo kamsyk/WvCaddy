@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class ContainerDbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "LwWvCaddy.db";
 
     private static final String SQL_CREATE_ENTRIES_CADDY =
@@ -42,7 +42,8 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD  + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR + " INTEGER,"
-                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE + " TEXT"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_AUTO_MAIL_STATUS + " TEXT"
                     + ")";
 
     public ContainerDbHelper(Context context) {
@@ -114,6 +115,12 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
 
                 db.execSQL(sql);
             }
+        if(!IsExistsColumnInTable(db, LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_AUTO_MAIL_STATUS)) {
+            String sql = "ALTER TABLE " + LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME +
+                    "  ADD " + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_AUTO_MAIL_STATUS + " TEXT";
+
+            db.execSQL(sql);
+        }
         //}
     }
 

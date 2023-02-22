@@ -59,6 +59,8 @@ public class VwCaddy_Settings extends AppCompatActivity {
             _pwd = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD));
             iHour = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR));
             _origHour = iHour;
+            ((TextView) findViewById(R.id.txtLastAutomMailDate)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE)));
+            ((TextView) findViewById(R.id.txtLastAutomMailStatus)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_AUTO_MAIL_STATUS)));
         }
 
         if (_pwd == null || _pwd.trim().length() == 0) {
@@ -287,7 +289,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
             }
 
             if(iHour > 0) {
-                startMailAlert(iHour);
+                //startMailAlert(iHour);
                 setMailWorker();
             } else {
                 stopMailWorker();

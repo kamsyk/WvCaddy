@@ -29,13 +29,24 @@ public class ItemListMailer {
 
     }
 
-    public void sendMail() {
+    public void sendMail() throws Exception {
         try {
-            if (new ItemListExport(
+            ItemListExport itemListExport = new ItemListExport(
                     _context,
                     _isAuto,
-                    _progressBar).isExportFolderExist()) {
-                new ItemListMailer.SendMailAsyncTask().execute();
+                    _progressBar);
+            if (itemListExport.isExportFolderExist()) {
+                if(_isAuto) {
+                    ItemListExport.ExportAsyncTask exportAsyncTask = itemListExport.new ExportAsyncTask();
+                    exportAsyncTask.exportThread();
+                    new GMailApi(_context).sendGMail(itemListExport.getFullExportPath());
+                } else {
+                    new ItemListMailer.SendMailAsyncTask().execute();
+                }
+            } else {
+                if(_isAuto) {
+                    throw new Exception("Export folder does not exist");
+                }
             }
         } catch (Exception e) {
             if(_isAuto) {
@@ -74,17 +85,13 @@ public class ItemListMailer {
 
                 return null;
             } catch (IOException | InterruptedException e) {
-                if(_isAuto) {
-                    return null;
-                } else {
+
                     return "Generování dokumentu selhalo";
-                }
+
             } catch (Exception e) {
-                if(_isAuto) {
-                    return null;
-                } else {
+
                     return "Odesílání dokumentu selhalo";
-                }
+
             }
         }
 

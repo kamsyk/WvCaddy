@@ -375,6 +375,20 @@
                     />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/txtLastAutomMailDate"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:textColor="#000"/>
+
+            <TextView
+                android:id="@+id/txtLastAutomMailStatus"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:textColor="#000"/>
+
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="wrap_content"
@@ -391,6 +405,8 @@
                 android:onClick="save"
                 android:layout_marginTop="15dp"
                 />
+
+
         </LinearLayout>
 
     </LinearLayout>

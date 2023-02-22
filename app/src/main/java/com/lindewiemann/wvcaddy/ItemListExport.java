@@ -85,18 +85,20 @@ public class ItemListExport {
             //Toast.makeText(MainActivity.this, "Directory Does Not Exist, Create It", Toast.LENGTH_SHORT).show();
             isFolderExist = _folder.mkdir();
         }
-        if (!isFolderExist && !_isAuto) {
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(_context);
-            builder1.setTitle("Došlo k chybě");
-            builder1.setMessage("Zkontrolujte zda má aplikace oprávnění pro zápis do úložiště");
-            builder1.setCancelable(true);
-            builder1.setNeutralButton("Zavřít",
-                    (DialogInterface dialog, int id) ->
-                            dialog.cancel()
-            );
+        if (!isFolderExist) {
+            if(!_isAuto) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(_context);
+                builder1.setTitle("Došlo k chybě");
+                builder1.setMessage("Zkontrolujte zda má aplikace oprávnění pro zápis do úložiště");
+                builder1.setCancelable(true);
+                builder1.setNeutralButton("Zavřít",
+                        (DialogInterface dialog, int id) ->
+                                dialog.cancel()
+                );
 
-            AlertDialog alert11 = builder1.create();
-            alert11.show();
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
             return false;
         }
 

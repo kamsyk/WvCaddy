@@ -37,47 +37,58 @@ public class MailWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        getSettings();
+        try {
+            getSettings();
 
-        GregorianCalendar nowDate = new GregorianCalendar();
-        int year = nowDate.get(Calendar.YEAR);
-        int month = nowDate.get(Calendar.MONTH);
-        int day = nowDate.get(Calendar.DAY_OF_MONTH);
+            setMailStatus("Probíhá odesílání mailu ...");
 
-        GregorianCalendar refDate = new GregorianCalendar(year, month, day, _sendHour, 0, 0);
+            GregorianCalendar nowDate = new GregorianCalendar();
+            int year = nowDate.get(Calendar.YEAR);
+            int month = nowDate.get(Calendar.MONTH);
+            int day = nowDate.get(Calendar.DAY_OF_MONTH);
 
-        boolean isSend = true;
-        if(_sendHour == Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
-            if (_lastSentDate != null) {
-                if(_lastSentDate.after(refDate)) {
-                    isSend =  false;
+            GregorianCalendar refDate = new GregorianCalendar(year, month, day, _sendHour, 0, 0);
+
+            boolean isSend = true;
+            if (_sendHour == Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+                if (_lastSentDate != null) {
+                    if (_lastSentDate.after(refDate)) {
+                        isSend = false;
+                    }
+                }
+            } else {
+                if (_lastSentDate != null) {
+                    GregorianCalendar dayCal = _lastSentDate;
+                    dayCal.add(Calendar.DATE, 1);
+
+                    if (dayCal.after(new GregorianCalendar())) {
+                        isSend = false;
+                    }
                 }
             }
-        } else {
-            if(_lastSentDate != null) {
-                GregorianCalendar dayCal = _lastSentDate;
-                dayCal.add(Calendar.DATE, 1);
 
-                if(dayCal.after(new GregorianCalendar())) {
-                    isSend = false;
+            isSend = true;
+
+            if (isSend) {
+                try {
+                    new ItemListMailer(
+                            getApplicationContext(),
+                            true,
+                            null
+                    ).sendMail();
+                } catch (Exception e) {
+                    setMailStatus(e.getMessage());
+                    return Result.failure();
                 }
+
+                setSentStamp();
+                setMailStatus("Odesláno úspěšně");
             }
+
+        } catch(Exception e) {
+            setMailStatus(e.getMessage());
         }
-
-        //isSend = true;
-
-        if (isSend) {
-            new ItemListMailer(
-                    getApplicationContext(),
-                    true,
-                    null
-            ).sendMail();
-
-            setSentStamp();
-        }
-
         return Result.success();
-
     }
 
     private void getSettings() {
@@ -109,6 +120,27 @@ public class MailWorker extends Worker {
         SQLiteDatabase db = _dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE, strDate);
+        if (cursor.getCount() == 0) {
+            db.insert(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, null, values);
+        } else {
+            cursor.moveToFirst();
+            db.update(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, values, null, null);
+        }
+    }
+
+    private void setMailStatus(String strMsg) {
+        GregorianCalendar gc = new GregorianCalendar();
+        SimpleDateFormat spf=new SimpleDateFormat(_dateFormat);
+        spf= new SimpleDateFormat(_dateFormat);
+        //String strDate = spf.format(date);
+        String strDate
+                = spf.format(
+                gc.getTime());
+
+        Cursor cursor = getVwCaddyCursor();
+        SQLiteDatabase db = _dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_AUTO_MAIL_STATUS, strDate + ": " + strMsg);
         if (cursor.getCount() == 0) {
             db.insert(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, null, values);
         } else {
