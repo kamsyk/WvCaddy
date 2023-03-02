@@ -129,6 +129,8 @@ public class MainActivity extends AppCompatActivity {
 
         if(_btnPicId > -1) {
             hideParts();
+        } else {
+            hideLlPcs();
         }
         if(_btnShiftId > -1) {
             hideShiftButtons();
@@ -168,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
         _btnPicId = btn.getId();
 
         hideParts();
+        displayLlPcs();
     }
 
     public void shiftClick(View view) {
@@ -199,6 +202,16 @@ public class MainActivity extends AppCompatActivity {
                 _iShift = LwVwCaddyDbDict.SHIFT_MORNING;
                 break;
         }
+    }
+
+    private void hideLlPcs() {
+        LinearLayout llPcs = (LinearLayout) findViewById(R.id.llPcs);
+        llPcs.setVisibility(View.GONE);
+    }
+
+    private void displayLlPcs() {
+        LinearLayout llPcs = (LinearLayout) findViewById(R.id.llPcs);
+        llPcs.setVisibility(View.VISIBLE);
     }
 
     public void save(View view) {
@@ -276,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
         _iLeftRight = -1;
         displayShiftButtons();
         displayImages();
+        hideLlPcs();
     }
 
     private long saveToDb() {

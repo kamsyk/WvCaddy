@@ -99,6 +99,7 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
             db.execSQL(sql);
         */
 
+        /*
         //if(DATABASE_VERSION < 5) {
             if(!IsExistsColumnInTable(db, LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR)) {
                 String sql = "ALTER TABLE " + LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME +
@@ -121,7 +122,7 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
 
             db.execSQL(sql);
         }
-        //}
+        //}*/
     }
 
     private boolean IsExistsColumnInTable(SQLiteDatabase lwVwDb, String lwWvTable, String columnToCheck) {

@@ -38,6 +38,7 @@ public class MailWorker extends Worker {
     @Override
     public Result doWork() {
         try {
+            setSentStamp();
             getSettings();
 
             setMailStatus("Probíhá odesílání mailu ...");
@@ -66,8 +67,6 @@ public class MailWorker extends Worker {
                     }
                 }
             }
-
-            isSend = true;
 
             if (isSend) {
                 try {
