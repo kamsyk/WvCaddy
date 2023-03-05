@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private int _btnShiftId = -1;
     private int _iLeftRight = -1;
     private int _iPcs = -1;
+    private FailReason _failReason = new FailReason("0", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -291,6 +292,8 @@ public class MainActivity extends AppCompatActivity {
 
             return;
         }
+
+        int failRewson = Integer.parseInt(_failReason.getId());
 
         try {
             long newRowId = saveToDb();
@@ -604,8 +607,21 @@ public class MainActivity extends AppCompatActivity {
         // attaching data adapter to spinner
         final Spinner spinner = (Spinner) findViewById(R.id.spinFailReason);
         spinner.setAdapter(dataAdapter);
+        spinner.setSelection(dataAdapter.getPosition(_failReason));
 
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
+                _failReason = (FailReason) parent.getSelectedItem();
+                //iFailCode = Integer.parseInt(failReason.getId());
+                //Toast.makeText(context, "Country ID: "+country.getId()+",  Country Name : "+country.getName(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 }
 
