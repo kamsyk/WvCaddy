@@ -3,6 +3,7 @@ package com.lindewiemann.wvcaddy;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,10 +24,15 @@ import android.view.MenuItem;
 import android.view.View;
 
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -34,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -44,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private final String CODE_ID = "Code";
     private final String SUBCODE_ID = "SubCode";
     private final String LEFT_RIGHT = "LeftRight";
+    private final String PCS = "Pcs";
     //private final String WORKER_TAG = "MailWorkerTag";
 
     ContainerDbHelper dbHelper = new ContainerDbHelper(this);
@@ -56,14 +64,14 @@ public class MainActivity extends AppCompatActivity {
     private int _btnPicId = -1;
     private int _btnShiftId = -1;
     private int _iLeftRight = -1;
-    //private PeriodicWorkRequest _mailWorkRequest;
-
+    private int _iPcs = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //setMailWorker();
+        setFailReason();
     }
 
     @Override
@@ -86,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         _strCode = savedInstanceState.getString(CODE_ID);
         _strSubcode = savedInstanceState.getString(SUBCODE_ID);
         _iLeftRight = savedInstanceState.getInt(LEFT_RIGHT);
+        _iPcs = savedInstanceState.getInt(PCS);
     }
 
     @Override
@@ -99,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         outState.putString(CODE_ID, _strCode);
         outState.putString(SUBCODE_ID, _strSubcode);
         outState.putInt(LEFT_RIGHT, _iLeftRight);
+        outState.putInt(PCS, _iPcs);
     }
 
     @Override
@@ -130,11 +140,13 @@ public class MainActivity extends AppCompatActivity {
         if(_btnPicId > -1) {
             hideParts();
         } else {
-            hideLlPcs();
+            hideLlPcsFailReason();
         }
         if(_btnShiftId > -1) {
             hideShiftButtons();
         }
+
+
     }
 
     private void setDefaultImages() {
@@ -170,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         _btnPicId = btn.getId();
 
         hideParts();
-        displayLlPcs();
+        displayLlPcsFailReason();
     }
 
     public void shiftClick(View view) {
@@ -204,14 +216,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void hideLlPcs() {
+    private void hideLlPcsFailReason() {
         LinearLayout llPcs = (LinearLayout) findViewById(R.id.llPcs);
         llPcs.setVisibility(View.GONE);
+
+        LinearLayout llFailReason = (LinearLayout) findViewById(R.id.llFailReason);
+        llFailReason.setVisibility(View.GONE);
     }
 
-    private void displayLlPcs() {
+    private void displayLlPcsFailReason() {
         LinearLayout llPcs = (LinearLayout) findViewById(R.id.llPcs);
         llPcs.setVisibility(View.VISIBLE);
+
+        LinearLayout llFailReason = (LinearLayout) findViewById(R.id.llFailReason);
+        llFailReason.setVisibility(View.VISIBLE);
     }
 
     public void save(View view) {
@@ -252,6 +270,28 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        EditText txtPcs = findViewById(R.id.pcs);
+        if(txtPcs.getText().toString().length() > 0) {
+            _iPcs = Integer.parseInt(txtPcs.getText().toString());
+        }
+        if(_iPcs == -1) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setTitle("Upozornění");
+            builder1.setMessage("Zadejte počet kusů");
+            builder1.setCancelable(true);
+            builder1.setNeutralButton("Zavřít",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+
+            return;
+        }
+
         try {
             long newRowId = saveToDb();
             Toast.makeText(
@@ -287,9 +327,13 @@ public class MainActivity extends AppCompatActivity {
         _strSubcode = null;
         _btnShiftId = -1;
         _iLeftRight = -1;
+        _iPcs = -1;
         displayShiftButtons();
         displayImages();
-        hideLlPcs();
+        hideLlPcsFailReason();
+        EditText txtPcs = findViewById(R.id.pcs);
+        txtPcs.setText("");
+        hideKeyboard();
     }
 
     private long saveToDb() {
@@ -304,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SHIFT, _iShift);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE, _strCode);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE, _strSubcode);
-        values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS, 1);
+        values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS, _iPcs);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE, strDate);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR, _iLeftRight);
 
@@ -415,7 +459,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btnUzsb2l:
                 _strCode = "UZSB 2";
-                _strSubcode ="810 2-4525;020 2-4529;810 2-4533A";
+                _strSubcode ="810 2-4535;020 2-4529;810 2-4533A";
                 _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb2l, lls);
                 break;
@@ -528,4 +572,40 @@ public class MainActivity extends AppCompatActivity {
         //Intent intent = new Intent(this, CaddyItemList.class);
         //startActivity(intent);
     }
+
+    private void hideKeyboard() {
+        View view = getWindow().getDecorView().getRootView();// this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            }
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    private void setFailReason() {
+        List<FailReason> failureList = new ArrayList<FailReason>();
+        //Add Codes
+        failureList.add(new FailReason("0",""));
+        failureList.add(new FailReason("1", "Seřizovací kus"));
+        failureList.add(new FailReason("2","Chyba svařování"));
+        failureList.add(new FailReason("3","Špatný nános lepidla"));
+        failureList.add(new FailReason("4","Deformace"));
+        failureList.add(new FailReason("5","Pád dílu"));
+        failureList.add(new FailReason("6","Vyskládání stolů"));
+
+        // Creating adapter for spinner
+        ArrayAdapter<FailReason> dataAdapter = new ArrayAdapter<FailReason>(this, android.R.layout.simple_spinner_item, failureList);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        final Spinner spinner = (Spinner) findViewById(R.id.spinFailReason);
+        spinner.setAdapter(dataAdapter);
+
+
+    }
 }
+

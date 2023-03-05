@@ -67,6 +67,7 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
     }
 
     private void DbUpgrade(SQLiteDatabase db) {
+
         /*if(DATABASE_VERSION < 3) {
             String sql =
                     "CREATE TABLE IF NOT EXISTS " + LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME + " ("

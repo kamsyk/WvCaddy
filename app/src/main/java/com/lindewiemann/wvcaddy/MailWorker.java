@@ -38,10 +38,7 @@ public class MailWorker extends Worker {
     @Override
     public Result doWork() {
         try {
-            setSentStamp();
             getSettings();
-
-            setMailStatus("Probíhá odesílání mailu ...");
 
             GregorianCalendar nowDate = new GregorianCalendar();
             int year = nowDate.get(Calendar.YEAR);

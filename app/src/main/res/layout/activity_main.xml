@@ -464,13 +464,43 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/llPcs"
+            android:id="@+id/llFailReason"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="bottom|center"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Druh vady:"
+                android:textSize="18dp"
+                android:layout_marginRight="10dp">
+            </TextView>
+
+            <Spinner
+                android:id="@+id/spinFailReason"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_border"
+                android:padding="2dp"
+                android:textColor="#000"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llPcs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom|center"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="0dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp">
 
@@ -490,7 +520,8 @@
                 android:hint="Zadejte počet kusů"
                 android:textSize="18dp"
                 android:inputType="number"
-                android:maxWidth="250dp"/>
+                android:maxWidth="250dp"
+                />
 
         </LinearLayout>
 
