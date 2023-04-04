@@ -22,6 +22,7 @@ public final class LwVwCaddyDbDict {
         public static final String COLUMN_NAME_USER_CODE = "user_code";
         public static final String COLUMN_NAME_SHIFT = "shift";
         public static final String COLUMN_NAME_LR = "lr";
+        public static final String COLUMN_NAME_FAIL_REASON = "fail_reason";
     }
 
     public static class WvCaddySubcodeEntry implements BaseColumns {
@@ -33,6 +34,7 @@ public final class LwVwCaddyDbDict {
         public static final String COLUMN_NAME_USER_CODE = "user_code";
         public static final String COLUMN_NAME_SHIFT = "shift";
         public static final String COLUMN_NAME_LR = "lr";
+        public static final String COLUMN_NAME_FAIL_REASON = "fail_reason";
     }
 
     public static class WvCaddySettings implements BaseColumns {

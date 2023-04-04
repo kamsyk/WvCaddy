@@ -64,14 +64,28 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tvCode"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:textSize="14dp"
-                android:layout_marginRight="10dp"
-                android:minWidth="100dp"/>
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:layout_marginRight="10dp"
+                    android:minWidth="140dp"/>
+
+                <TextView
+                    android:id="@+id/tvFailReason"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:layout_marginRight="10dp"
+                    android:minWidth="140dp"/>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tvSubCode"

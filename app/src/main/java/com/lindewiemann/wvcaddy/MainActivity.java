@@ -293,7 +293,24 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        int failRewson = Integer.parseInt(_failReason.getId());
+        int failReason = Integer.parseInt(_failReason.getId());
+        if(failReason == 0) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+            builder1.setTitle("Upozornění");
+            builder1.setMessage("Zadejte druh vady");
+            builder1.setCancelable(true);
+            builder1.setNeutralButton("Zavřít",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+
+            return;
+        }
 
         try {
             long newRowId = saveToDb();
@@ -331,6 +348,9 @@ public class MainActivity extends AppCompatActivity {
         _btnShiftId = -1;
         _iLeftRight = -1;
         _iPcs = -1;
+        _failReason = new FailReason("0", "");
+        final Spinner spinner = (Spinner) findViewById(R.id.spinFailReason);
+        spinner.setSelection(0);
         displayShiftButtons();
         displayImages();
         hideLlPcsFailReason();
@@ -354,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS, _iPcs);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE, strDate);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR, _iLeftRight);
+        values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_FAIL_REASON, _failReason.getId());
 
         // Insert the new row, returning the primary key value of the new row
         long newRowId = db.insert(LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME, null, values);
@@ -373,9 +394,10 @@ public class MainActivity extends AppCompatActivity {
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_SHIFT, _iShift);
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_CODE, _strCode);
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_SUBCODE, strSubCodeLines.get(i));
-                valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_PCS, 1);
+                valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_PCS, _iPcs);
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_DATE, strDate);
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_LR, _iLeftRight);
+                valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_FAIL_REASON, _failReason.getId());
                 db.insert(LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME, null, valuesSubcode);
                 //db.close();
             }

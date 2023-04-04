@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.lindewiemann.wvcaddy.FailReason;
 import com.lindewiemann.wvcaddy.LwVwCaddyDbDict;
 import com.lindewiemann.wvcaddy.R;
 
@@ -37,6 +38,7 @@ public class VwCaddyItemsAdapter extends VwCaddyCursorAdapter {
         TextView tvPcs = (TextView) view.findViewById(R.id.tvPcs);
         TextView tvCode = (TextView) view.findViewById(R.id.tvCode);
         TextView tvSubCode = (TextView) view.findViewById(R.id.tvSubCode);
+        TextView tvFailReason = (TextView) view.findViewById(R.id.tvFailReason);
 
         // Extract properties from cursor
         String strDateTime = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE));
@@ -46,6 +48,7 @@ public class VwCaddyItemsAdapter extends VwCaddyCursorAdapter {
         String strSubCode = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE));
         int iLr = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR));
         String strLr = LwVwCaddyDbDict.getLeftRightText(iLr);
+        int iFailReason = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_FAIL_REASON));
         strCode += " " + strLr;
 
         String strSubCodeLines = "";
@@ -62,6 +65,7 @@ public class VwCaddyItemsAdapter extends VwCaddyCursorAdapter {
         String strTime = strDateItems[1];
         String strShift = String.valueOf(LwVwCaddyDbDict.getShiftName(iShift));
         String strPcs = String.valueOf(iPcs) + " ks";
+        String strFailReason = getFailReason(iFailReason);
 
         // Populate fields with extracted properties
         tvDatum.setText(strDate);
@@ -70,5 +74,32 @@ public class VwCaddyItemsAdapter extends VwCaddyCursorAdapter {
         tvPcs.setText(strPcs);
         tvCode.setText(strCode);
         tvSubCode.setText(strSubCodeLines);
+        tvFailReason.setText(strFailReason);
+    }
+
+    private String getFailReason(int iFailReason) {
+        switch(iFailReason) {
+            case 1:
+                return "Seřizovací kus";
+            case 2:
+                return "Chyba svařování";
+            case 3:
+                return "Špatný nános lepidla";
+            case 4:
+                return "Deformace";
+            case 5:
+                return "Pád dílu";
+            case 6:
+                return "Vyskládání stolů";
+            default:
+                    return "";
+        }
+        /*failureList.add(new FailReason("0",""));
+        failureList.add(new FailReason("1", "Seřizovací kus"));
+        failureList.add(new FailReason("2","Chyba svařování"));
+        failureList.add(new FailReason("3","Špatný nános lepidla"));
+        failureList.add(new FailReason("4","Deformace"));
+        failureList.add(new FailReason("5","Pád dílu"));
+        failureList.add(new FailReason("6","Vyskládání stolů"));*/
     }
 }

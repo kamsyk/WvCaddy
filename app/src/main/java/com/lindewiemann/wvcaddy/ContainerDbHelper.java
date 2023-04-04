@@ -18,7 +18,8 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                     + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS + " INTEGER,"
                     + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_USER_CODE + " INTEGER,"
-                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR + " INTEGER"
+                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR + " INTEGER,"
+                    + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_FAIL_REASON + " INTEGER"
                     + ")";
 
     private static final String SQL_CREATE_ENTRIES_CADDY_SUBCODE =
@@ -29,7 +30,8 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                     + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_PCS + " INTEGER,"
                     + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_DATE + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_USER_CODE + " INTEGER,"
-                    + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_LR + " INTEGER"
+                    + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_LR + " INTEGER,"
+                    + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_FAIL_REASON + " INTEGER"
                     + ")";
 
     private static final String SQL_CREATE_ENTRIES_CADDY_SETTINGS =
