@@ -38,6 +38,8 @@ public class MailWorker extends Worker {
     @Override
     public Result doWork() {
         try {
+            setCheckStamp();
+
             getSettings();
 
             GregorianCalendar nowDate = new GregorianCalendar();
@@ -77,7 +79,6 @@ public class MailWorker extends Worker {
                     return Result.failure();
                 }
 
-                setSentStamp();
                 setMailStatus("Odesláno úspěšně");
             }
 
@@ -97,13 +98,10 @@ public class MailWorker extends Worker {
             if(strSentDate != null) {
                 _lastSentDate = stringToDate(strSentDate, _dateFormat);
             }
-
         }
-
-
     }
 
-    private void setSentStamp() {
+    private void setCheckStamp() {
         GregorianCalendar gc = new GregorianCalendar();
         SimpleDateFormat spf=new SimpleDateFormat(_dateFormat);
         spf= new SimpleDateFormat(_dateFormat);
@@ -111,11 +109,12 @@ public class MailWorker extends Worker {
         String strDate
                 = spf.format(
                 gc.getTime());
+        String msg = "Poslední kontrola automatického odeslání: " + strDate;
 
         Cursor cursor = getVwCaddyCursor();
         SQLiteDatabase db = _dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE, strDate);
+        values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE, msg);
         if (cursor.getCount() == 0) {
             db.insert(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, null, values);
         } else {
