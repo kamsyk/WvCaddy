@@ -172,5 +172,4 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
             if (mCursor != null) mCursor.close();
         }
     }
-
 }
