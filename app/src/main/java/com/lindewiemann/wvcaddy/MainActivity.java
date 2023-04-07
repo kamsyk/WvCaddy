@@ -451,10 +451,10 @@ public class MainActivity extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int iScreenHeighDelta = 3 * btnSave.getHeight();
-        int iHeight = (displayMetrics.heightPixels - iScreenHeighDelta - 150) / 1;
+        int iHeight = (displayMetrics.heightPixels - iScreenHeighDelta - 300) / 1;
 
-        if(iHeight < 200) iHeight = 200;
-        if(iHeight > 1200) iHeight = 1100;
+        if(iHeight < 150) iHeight = 150;
+        if(iHeight > 1200) iHeight = 1200;
         int iWidth = displayMetrics.widthPixels - 150 ;
         if(iWidth < 150) iWidth = 150;
         if(iWidth > 900) iWidth = 900;
