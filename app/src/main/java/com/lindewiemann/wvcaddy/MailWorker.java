@@ -70,6 +70,7 @@ public class MailWorker extends Worker {
                     new ItemListMailer(
                             getApplicationContext(),
                             true,
+                            true,
                             null
                     ).sendMail();
                     setCheckStamp();

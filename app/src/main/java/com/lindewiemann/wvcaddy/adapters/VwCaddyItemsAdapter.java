@@ -60,6 +60,8 @@ public class VwCaddyItemsAdapter extends VwCaddyCursorAdapter {
             }
         }
 
+        //int iDate = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT));
+
         String[] strDateItems = strDateTime.split(" ");
         String strDate = strDateItems[0];
         String strTime = strDateItems[1];

@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -33,7 +34,9 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class CaddyItemList extends AppCompatActivity {
@@ -43,6 +46,7 @@ public class CaddyItemList extends AppCompatActivity {
     String fullExportPath;
     Context context = this;
     private ProgressDialog mProgressDialog;
+    private boolean _isLastMonthOnly = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +85,31 @@ public class CaddyItemList extends AppCompatActivity {
         todoAdapter.changeCursor(cursor);
     }
 
+
     private Cursor getVwCaddyCursor() {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
+        String strFilter = null;
+        if(_isLastMonthOnly) {
+            GregorianCalendar startDate = new GregorianCalendar();
+            startDate.add(Calendar.MONTH, -1);
+            startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
+
+            GregorianCalendar endDate = new GregorianCalendar();
+            endDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
+            endDate.add(Calendar.MONTH, 1);
+
+            long intStart = startDate.getTime().getTime();
+            long intEnd = endDate.getTime().getTime();
+
+            strFilter = LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + ">" + intStart + " AND " + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + "<" + intEnd;
+        }
+
         return db.query(
                 LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME,    // The table to query
                 null,                               // The array of columns to return (pass null to get all)
-                null,                               // The columns for the WHERE clause
+                strFilter,                               // The columns for the WHERE clause
                 null,                           // The values for the WHERE clause
                 null,                               // don't group the rows
                 null,                               // don't filter by row groups
@@ -101,14 +122,11 @@ public class CaddyItemList extends AppCompatActivity {
     public void exportToFile(View v) {
         try {
             progressBar = findViewById(R.id.pgbExport);
-            /*if (isExportFolderExist(v.getContext())) {
-                progressBar.setVisibility(View.VISIBLE);
-                new ExportAsyncTask().execute();
-            }*/
+
             new ItemListExport(
                     v.getContext(),
                     false,
-                    progressBar).exportToFile();
+                    progressBar).exportToFile(_isLastMonthOnly);
         } catch(Exception ex) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
             builder1.setTitle("Došlo k chybě");
@@ -128,14 +146,11 @@ public class CaddyItemList extends AppCompatActivity {
         try {
             if (new ItemListExport(v.getContext(), false, null).isExportFolderExist()) {
                 progressBar = findViewById(R.id.pgbExport);
-                /*new SendMailAsyncTask().execute();
-                if(mProgressDialog == null) {
-                    mProgressDialog = ProgressDialog.show(context, "Odeslání mail", "Probíhá odesílání mailu ...", false, false);
-                }*/
 
                 new ItemListMailer(
                         v.getContext(),
                         false,
+                        _isLastMonthOnly,
                         progressBar).sendMail();
 
             }
@@ -154,211 +169,9 @@ public class CaddyItemList extends AppCompatActivity {
         }
     }
 
-
-    /*private boolean isExportFolderExist(Context context) {
-        folder = context.getExternalFilesDir(null);
-
-        boolean isFolderExist = true;
-        if (!folder.exists()) {
-            //Toast.makeText(MainActivity.this, "Directory Does Not Exist, Create It", Toast.LENGTH_SHORT).show();
-            isFolderExist = folder.mkdir();
-        }
-        if (!isFolderExist) {
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-            builder1.setTitle("Došlo k chybě");
-            builder1.setMessage("Zkontrolujte zda má aplikace oprávnění pro zápis do úložiště");
-            builder1.setCancelable(true);
-            builder1.setNeutralButton("Zavřít",
-                    (DialogInterface dialog, int id) ->
-                            dialog.cancel()
-            );
-
-            AlertDialog alert11 = builder1.create();
-            alert11.show();
-            return false;
-        }
-
-        return true;
-    }*/
-
-/*
-    class ExportAsyncTask extends AsyncTask<Void, Integer, Boolean> {
-        String fileName = null;
-
-        public ExportAsyncTask() {
-            super();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-                exportThread();
-                return true;
-            } catch (IOException | InterruptedException e) {
-                return false;
-            }
-
-        }
-        @Override
-        protected void onPostExecute(Boolean result) {
-            progressBar.setVisibility(View.GONE);
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-            if(result) {
-                builder1.setTitle("Export byl dokončen");
-                builder1.setMessage("Data byla uložena do souboru " + fullExportPath);
-                builder1.setCancelable(true);
-                builder1.setNeutralButton("Zavřít",
-                        (DialogInterface dialog, int id) ->
-                                dialog.cancel()
-                );
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-            } else {
-
-                builder1.setTitle("Došlo k chybě");
-                builder1.setMessage("Export dat selhal");
-                builder1.setCancelable(true);
-                builder1.setNeutralButton("Zavřít",
-                        (DialogInterface dialog, int id) ->
-                                dialog.cancel()
-                );
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-            }
-        }
-        @Override
-        protected void onPreExecute() {
-            progressBar.setProgress(0);
-        }
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            //Log.d("Progress", String.valueOf(values[0]));
-            progressBar.setProgress(values[0]);
-        }
-
-        public void exportThread() throws IOException, InterruptedException {
-
-            try {
-                Date date = new Date();
-                DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmsss", Locale.US);
-                String strDate = dateFormat.format(date);
-
-                fileName = "VwCaddyFull" + strDate + ".csv";
-                File exportFile = new File(folder, fileName);
-                exportFile.createNewFile();
-
-                FileOutputStream fOut = new FileOutputStream(exportFile);
-                OutputStreamWriter myOutWriter = new OutputStreamWriter(fOut, StandardCharsets.UTF_8);
-
-                myOutWriter.write("\ufeff"); // Add BOM to UTF-8 necessary for displaying Czech chars in excel in windows
-
-                String strHeader = "Datum,"
-                        + "Směna,"
-                        + "Kód,"
-                        + "Levé / Pravé,"
-                        + "Subkód,"
-                        + "Počet kusů"
-                        + System.lineSeparator();
-                myOutWriter.append(strHeader);
-
-                Cursor cursor = getVwCaddyCursor();
-                int iRowIndex = 0;
-
-                while (cursor.moveToNext()) {
-                    String strLine = getExportLine(cursor);
-                    myOutWriter.append(strLine);
-                    publishProgress(iRowIndex);
-                    iRowIndex++;
-
-                }
-                myOutWriter.close();
-                fOut.close();
-
-                fullExportPath = folder.getAbsolutePath() + "/" + fileName;
-            } catch(Exception ex) {
-                throw ex;
-            }
-        }
-
-        private String getExportLine(Cursor cursor) {
-            String strDateTime = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE));
-            int iShift = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SHIFT));
-            String strCode = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_CODE));
-            int iLr = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR));
-            String strSubCode = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE));
-            int iPcs = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS));
-
-            String strShift = LwVwCaddyDbDict.getShiftName(iShift);
-            String strLr = LwVwCaddyDbDict.getLeftRightText(iLr);
-            String strPcs = String.valueOf(iPcs);
-
-            String exportLine = strDateTime + ","
-                    + strShift + ","
-                    + strCode + ","
-                    + strLr + ","
-                    + strSubCode + ","
-                    + strPcs;
-            exportLine += System.lineSeparator();
-
-            return exportLine;
-
-        }
-    }*/
-/*
-    class SendMailAsyncTask extends AsyncTask<Void, Integer, String> {
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                new ExportAsyncTask().exportThread();
-                //new LwMailJetClient(getApplicationContext()).sendMail(fullExportPath);
-
-                //Send GMail
-                new GMailApi(getApplicationContext()).sendGMail(fullExportPath);
-
-                return null;
-            } catch (IOException | InterruptedException e) {
-                return "Generování dokumentu selhalo";
-            } catch (Exception e) {
-                return "Odesílání dokumentu selhalo";
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            progressBar.setVisibility(View.GONE);
-            mProgressDialog.dismiss();
-
-            if(result == null) {
-                Toast.makeText(
-                        getApplicationContext(),
-                        "Mail byl odeslán",
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-                builder1.setTitle("Při odesílání mailu došlo k chybě");
-                builder1.setMessage(result);
-                builder1.setCancelable(true);
-                builder1.setNeutralButton("Zavřít",
-                        (DialogInterface dialog, int id) ->
-                                dialog.cancel()
-                );
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-            }
-        }
-        @Override
-        protected void onPreExecute() {
-
-            progressBar.setProgress(0);
-            mProgressDialog = ProgressDialog.show(context,"Odeslání mail", "Probíhá odesílání mailu ...",false,false);
-        }
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            //Log.d("Progress", String.valueOf(values[0]));
-            progressBar.setProgress(values[0]);
-        }
-    }*/
+    public void ckbOnlyMonth(View v) {
+        CheckBox ckbMonthOnly = (CheckBox)v;
+        _isLastMonthOnly = (ckbMonthOnly.isChecked());
+        loadItems();
+    }
 }

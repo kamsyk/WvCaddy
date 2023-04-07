@@ -19,9 +19,11 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -56,13 +58,13 @@ public class ItemListExport {
 
     }
 
-    public void exportToFile() {
+    public void exportToFile(boolean isLastMonthOnly) {
         try {
             if (isExportFolderExist()) {
                 if(_progressBar != null) {
                     _progressBar.setVisibility(View.VISIBLE);
                 }
-                new ItemListExport.ExportAsyncTask().execute();
+                new ItemListExport.ExportAsyncTask(isLastMonthOnly).execute();
             }
 
 
@@ -118,28 +120,60 @@ public class ItemListExport {
         return context.getExternalFilesDir(null);
     }
 
-    private Cursor getVwCaddyCursor() {
+    private Cursor getVwCaddyCursor(boolean isLastMonthOnly) {
 
         SQLiteDatabase db = _dbHelper.getReadableDatabase();
+
+        String strFilter = null;
+        if(isLastMonthOnly) {
+            GregorianCalendar startDate = new GregorianCalendar();
+            startDate.add(Calendar.MONTH, -1);
+            startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
+
+            GregorianCalendar endDate = new GregorianCalendar();
+            endDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
+            endDate.add(Calendar.MONTH, 1);
+
+            long intStart = startDate.getTime().getTime();
+            long intEnd = endDate.getTime().getTime();
+
+            strFilter = LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + ">" + intStart + " AND " + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + "<" + intEnd;
+        }
 
         return db.query(
                 LwVwCaddyDbDict.WvCaddyEntry.TABLE_NAME,    // The table to query
                 null,                               // The array of columns to return (pass null to get all)
-                null,                               // The columns for the WHERE clause
+                strFilter,                               // The columns for the WHERE clause
                 null,                           // The values for the WHERE clause
                 null,                               // don't group the rows
                 null,                               // don't filter by row groups
                 "rowid DESC");
     }
 
-    private Cursor getVwCaddySubcodeCursor() {
+    private Cursor getVwCaddySubcodeCursor(boolean isLastMonthOnly) {
 
         SQLiteDatabase db = _dbHelper.getReadableDatabase();
+
+        String strFilter = null;
+        if(isLastMonthOnly) {
+            GregorianCalendar startDate = new GregorianCalendar();
+            startDate.add(Calendar.MONTH, -1);
+            startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
+
+            GregorianCalendar endDate = new GregorianCalendar();
+            endDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
+            endDate.add(Calendar.MONTH, 1);
+
+            long intStart = startDate.getTime().getTime();
+            long intEnd = endDate.getTime().getTime();
+
+            strFilter = LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + ">" + intStart + " AND " + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + "<" + intEnd;
+        }
 
         return db.query(
                 LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME,    // The table to query
                 null,                               // The array of columns to return (pass null to get all)
-                null,                               // The columns for the WHERE clause
+                strFilter,                               // The columns for the WHERE clause
                 null,                           // The values for the WHERE clause
                 null,                               // don't group the rows
                 null,                               // don't filter by row groups
@@ -149,15 +183,17 @@ public class ItemListExport {
     public class ExportAsyncTask extends AsyncTask<Void, Integer, Boolean> {
         String fileName = null;
         String fileSummaryName = null;
+        boolean _isLastMonthOnly = true;
 
-        public ExportAsyncTask() {
+        public ExportAsyncTask(boolean isLastMonthOnly) {
             super();
+            _isLastMonthOnly = isLastMonthOnly;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                exportThread();
+                exportThread(_isLastMonthOnly);
                 return true;
             } catch (IOException | InterruptedException e) {
                 return false;
@@ -220,7 +256,7 @@ public class ItemListExport {
             }
         }
 
-        public void exportThread() throws IOException, InterruptedException {
+        public void exportThread(boolean isLastMonthOnly) throws IOException, InterruptedException {
 
             try {
                 Date date = new Date();
@@ -246,7 +282,7 @@ public class ItemListExport {
                         + System.lineSeparator();
                 myOutWriter.append(strHeader);
 
-                Cursor cursor = getVwCaddyCursor();
+                Cursor cursor = getVwCaddyCursor(isLastMonthOnly);
                 int iRowIndex = 0;
 
                 while (cursor.moveToNext()) {
@@ -280,7 +316,7 @@ public class ItemListExport {
                         + System.lineSeparator();
                 myOutSummaryWriter.append(strSummaryHeader);
 
-                Cursor cursorSummary = getVwCaddySubcodeCursor();
+                Cursor cursorSummary = getVwCaddySubcodeCursor(isLastMonthOnly);
                 iRowIndex = 0;
 
                 Map<String, Integer> mapSummary = new HashMap<String, Integer>();

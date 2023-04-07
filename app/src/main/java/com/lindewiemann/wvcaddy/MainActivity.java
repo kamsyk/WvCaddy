@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
+import android.text.format.DateUtils;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,9 +40,13 @@ import android.widget.Toast;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -119,22 +125,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    /*private void setMailWorker() {
-        _mailWorkRequest = new PeriodicWorkRequest.Builder(
-                MailWorker.class,
-                16*60*1000L, //15 mins is minimum
-                TimeUnit.MILLISECONDS)
-                .addTag(WORKER_TAG)
-                .build();
-
-        WorkManager.getInstance(this).cancelAllWorkByTag(WORKER_TAG);
-
-        WorkManager
-                .getInstance(this)
-                .enqueueUniquePeriodicWork(WORKER_TAG, ExistingPeriodicWorkPolicy.KEEP, _mailWorkRequest);
-
-    }*/
-
     private void loadInit() {
         setDefaultImages();
 
@@ -146,8 +136,6 @@ public class MainActivity extends AppCompatActivity {
         if(_btnShiftId > -1) {
             hideShiftButtons();
         }
-
-
     }
 
     private void setDefaultImages() {
@@ -361,8 +349,17 @@ public class MainActivity extends AppCompatActivity {
 
     private long saveToDb() {
         Date date = new Date();
+
+        /*
+        GregorianCalendar startDate = new GregorianCalendar();
+        startDate.add(Calendar.MONTH, -1);
+        startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH), 0, 0);
+        date = startDate.getTime();
+        */
+
         DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
         String strDate = dateFormat.format(date);
+        Long iDate = date.getTime();
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -373,6 +370,7 @@ public class MainActivity extends AppCompatActivity {
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE, _strSubcode);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_PCS, _iPcs);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE, strDate);
+        values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT, iDate);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_LR, _iLeftRight);
         values.put(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_FAIL_REASON, _failReason.getId());
 
@@ -396,6 +394,7 @@ public class MainActivity extends AppCompatActivity {
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_SUBCODE, strSubCodeLines.get(i));
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_PCS, _iPcs);
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_DATE, strDate);
+                valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_DATE_INT, iDate);
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_LR, _iLeftRight);
                 valuesSubcode.put(LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_FAIL_REASON, _failReason.getId());
                 db.insert(LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME, null, valuesSubcode);
@@ -455,7 +454,7 @@ public class MainActivity extends AppCompatActivity {
         int iHeight = (displayMetrics.heightPixels - iScreenHeighDelta - 150) / 1;
 
         if(iHeight < 200) iHeight = 200;
-        if(iHeight > 1200) iHeight = 1200;
+        if(iHeight > 1200) iHeight = 1100;
         int iWidth = displayMetrics.widthPixels - 150 ;
         if(iWidth < 150) iWidth = 150;
         if(iWidth > 900) iWidth = 900;

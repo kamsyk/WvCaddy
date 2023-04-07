@@ -16,6 +16,7 @@ public final class LwVwCaddyDbDict {
     public static class WvCaddyEntry implements BaseColumns {
         public static final String TABLE_NAME = "wvcaddy";
         public static final String COLUMN_NAME_DATE = "datum";
+        public static final String COLUMN_NAME_DATE_INT = "datum_int";
         public static final String COLUMN_NAME_CODE = "code";
         public static final String COLUMN_NAME_SUBCODE = "subcode";
         public static final String COLUMN_NAME_PCS = "ks";
@@ -28,6 +29,7 @@ public final class LwVwCaddyDbDict {
     public static class WvCaddySubcodeEntry implements BaseColumns {
         public static final String TABLE_NAME = "wvcaddysubcode";
         public static final String COLUMN_NAME_DATE = "datum";
+        public static final String COLUMN_NAME_DATE_INT = "datum_int";
         public static final String COLUMN_NAME_CODE = "code";
         public static final String COLUMN_NAME_SUBCODE = "subcode";
         public static final String COLUMN_NAME_PCS = "ks";

@@ -18,15 +18,17 @@ public class ItemListMailer {
     private LinearProgressIndicator _progressBar = null;
     private ProgressDialog _progressDialog;
     private boolean _isResultOk = false;
+    private boolean _isLastMonthOnly = true;
 
     public ItemListMailer(
             Context context,
             boolean isAuto,
+            boolean isLastMonthOnly,
             LinearProgressIndicator progressBar) {
         _context = context;
         _isAuto = isAuto;
         _progressBar = progressBar;
-
+        _isLastMonthOnly = isLastMonthOnly;
     }
 
     public void sendMail() throws Exception {
@@ -37,8 +39,8 @@ public class ItemListMailer {
                     _progressBar);
             if (itemListExport.isExportFolderExist()) {
                 if(_isAuto) {
-                    ItemListExport.ExportAsyncTask exportAsyncTask = itemListExport.new ExportAsyncTask();
-                    exportAsyncTask.exportThread();
+                    ItemListExport.ExportAsyncTask exportAsyncTask = itemListExport.new ExportAsyncTask(_isLastMonthOnly);
+                    exportAsyncTask.exportThread(_isLastMonthOnly);
                     new GMailApi(_context).sendGMail(itemListExport.getFullExportPath(), itemListExport.getFullSummaryExportPath());
                 } else {
                     new ItemListMailer.SendMailAsyncTask().execute();
@@ -77,8 +79,8 @@ public class ItemListMailer {
                         _progressBar);
 
                 //ItemListExport.ExportAsyncTask().exportThread();
-                ItemListExport.ExportAsyncTask exportAsyncTask = itemListExport.new ExportAsyncTask();
-                exportAsyncTask.exportThread();
+                ItemListExport.ExportAsyncTask exportAsyncTask = itemListExport.new ExportAsyncTask(_isLastMonthOnly);
+                exportAsyncTask.exportThread(_isLastMonthOnly);
 
                 //Send GMail
                 new GMailApi(_context).sendGMail(itemListExport.getFullExportPath(), itemListExport.getFullSummaryExportPath());
