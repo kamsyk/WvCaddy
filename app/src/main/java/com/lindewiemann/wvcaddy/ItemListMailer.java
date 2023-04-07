@@ -39,7 +39,7 @@ public class ItemListMailer {
                 if(_isAuto) {
                     ItemListExport.ExportAsyncTask exportAsyncTask = itemListExport.new ExportAsyncTask();
                     exportAsyncTask.exportThread();
-                    new GMailApi(_context).sendGMail(itemListExport.getFullExportPath());
+                    new GMailApi(_context).sendGMail(itemListExport.getFullExportPath(), itemListExport.getFullSummaryExportPath());
                 } else {
                     new ItemListMailer.SendMailAsyncTask().execute();
                 }
@@ -81,7 +81,7 @@ public class ItemListMailer {
                 exportAsyncTask.exportThread();
 
                 //Send GMail
-                new GMailApi(_context).sendGMail(itemListExport.getFullExportPath());
+                new GMailApi(_context).sendGMail(itemListExport.getFullExportPath(), itemListExport.getFullSummaryExportPath());
 
                 return null;
             } catch (IOException | InterruptedException e) {

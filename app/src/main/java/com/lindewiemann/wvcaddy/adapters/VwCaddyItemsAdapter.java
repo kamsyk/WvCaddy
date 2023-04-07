@@ -77,7 +77,7 @@ public class VwCaddyItemsAdapter extends VwCaddyCursorAdapter {
         tvFailReason.setText(strFailReason);
     }
 
-    private String getFailReason(int iFailReason) {
+    public static String getFailReason(int iFailReason) {
         switch(iFailReason) {
             case 1:
                 return "Seřizovací kus";
@@ -94,12 +94,6 @@ public class VwCaddyItemsAdapter extends VwCaddyCursorAdapter {
             default:
                     return "";
         }
-        /*failureList.add(new FailReason("0",""));
-        failureList.add(new FailReason("1", "Seřizovací kus"));
-        failureList.add(new FailReason("2","Chyba svařování"));
-        failureList.add(new FailReason("3","Špatný nános lepidla"));
-        failureList.add(new FailReason("4","Deformace"));
-        failureList.add(new FailReason("5","Pád dílu"));
-        failureList.add(new FailReason("6","Vyskládání stolů"));*/
+
     }
 }

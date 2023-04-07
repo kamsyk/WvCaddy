@@ -33,7 +33,7 @@ public class GMailApi {
         _dbHelper = new ContainerDbHelper(_appContext);
     }
 
-    public void sendGMail(String file1Path) throws Exception {
+    public void sendGMail(String file1Path, String file2Path) throws Exception {
         String mailRecipients = null;
 
         Cursor cursor = getVwCaddySettingCursor();
@@ -99,9 +99,13 @@ public class GMailApi {
             MimeBodyPart csvAttachment = new MimeBodyPart();
             csvAttachment.attachFile(file1Path);
 
+            MimeBodyPart csvAttachment2= new MimeBodyPart();
+            csvAttachment2.attachFile(file2Path);
+
             //Attach body parts
             emailContent.addBodyPart(textBodyPart);
             emailContent.addBodyPart(csvAttachment);
+            emailContent.addBodyPart(csvAttachment2);
 
             //Attach multipart to message
             mm.setContent(emailContent);

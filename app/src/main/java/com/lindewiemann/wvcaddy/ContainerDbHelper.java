@@ -26,6 +26,7 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + LwVwCaddyDbDict.WvCaddySubcodeEntry.TABLE_NAME + " ("
                     + LwVwCaddyDbDict.WvCaddySubcodeEntry._ID + " INTEGER PRIMARY KEY,"
                     + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_SHIFT + " INTEGER,"
+                    + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_CODE + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_SUBCODE + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_PCS + " INTEGER,"
                     + LwVwCaddyDbDict.WvCaddySubcodeEntry.COLUMN_NAME_DATE + " TEXT,"

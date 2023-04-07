@@ -59,7 +59,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
             _pwd = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD));
             iHour = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR));
             _origHour = iHour;
-            ((TextView) findViewById(R.id.txtLastAutomMailDate)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE)));
+            ((TextView) findViewById(R.id.txtLastAutoCheckDate)).setText("Poslední kontrola automatického odeslání: " + cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE)));
             ((TextView) findViewById(R.id.txtLastAutomMailStatus)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_AUTO_MAIL_STATUS)));
         }
 
@@ -356,6 +356,22 @@ public class VwCaddy_Settings extends AppCompatActivity {
                 .getInstance(this)
                 .enqueueUniquePeriodicWork(WORKER_TAG, ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE, mailWorkRequest);
 
+        clearCheckStamp();
+
+    }
+
+    private void clearCheckStamp() {
+        ContainerDbHelper dbHelper = new ContainerDbHelper(this);
+
+        Cursor cursor = getVwCaddyCursor();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        String clearDate = null;
+        values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE, clearDate);
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            db.update(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, values, null, null);
+        }
     }
 
     private void stopMailWorker() {
