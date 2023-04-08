@@ -357,7 +357,7 @@
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="Hodina automatického odeslání mailu"
+                android:text="Hodina automatického odeslání mailu (1. den v měsíci)"
                 android:layout_marginTop="10dp"
                 android:textColor="#000"/>
 
@@ -374,13 +374,6 @@
                     android:textColor="#000"
                     />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/txtLastAutoCheckDate"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:layout_marginTop="10dp"
-                android:textColor="#000"/>
 
             <TextView
                 android:id="@+id/txtLastAutomMailStatus"

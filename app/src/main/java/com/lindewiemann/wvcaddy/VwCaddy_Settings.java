@@ -59,7 +59,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
             _pwd = cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_PASSWORD));
             iHour = cursor.getInt(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR));
             _origHour = iHour;
-            ((TextView) findViewById(R.id.txtLastAutoCheckDate)).setText("Poslední kontrola automatického odeslání: " + cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE)));
+            //((TextView) findViewById(R.id.txtLastAutoCheckDate)).setText("Poslední kontrola automatického odeslání: " + cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE)));
             ((TextView) findViewById(R.id.txtLastAutomMailStatus)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_AUTO_MAIL_STATUS)));
         }
 

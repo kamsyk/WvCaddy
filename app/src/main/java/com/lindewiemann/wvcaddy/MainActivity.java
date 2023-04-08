@@ -478,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
         switch(_btnPicId) {
             case R.id.btnUzsb1l:
                 _strCode = "UZSB 1";
-                _strSubcode = "810 2-4525;020 2-4529";
+                _strSubcode = "810 2-4535;020 2-4529";
                 _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb1l, lls);
                 break;
@@ -490,13 +490,13 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btnUzsb3l:
                 _strCode = "UZSB 3";
-                _strSubcode ="810 2-4525;020 2-4529;810 2-4533A;020 2-4531;820 8-0263";
+                _strSubcode ="810 2-4535;020 2-4529;810 2-4533A;020 2-4531;820 8-0263";
                 _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb3l, lls);
                 break;
             case R.id.btnUzsb4l:
                 _strCode = "UZSB 4";
-                _strSubcode = "810 2-4525;020 2-4529;810 2-4533A;020 2-4531;820 8-0263;810 2-4537A";
+                _strSubcode = "810 2-4535;020 2-4529;810 2-4533A;020 2-4531;820 8-0263;810 2-4537A";
                 _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb4l, lls);
                 break;

@@ -45,10 +45,10 @@ public class MailWorker extends Worker {
             int month = nowDate.get(Calendar.MONTH);
             int day = nowDate.get(Calendar.DAY_OF_MONTH);
 
-            GregorianCalendar refDate = new GregorianCalendar(year, month, day, _sendHour, 0, 0);
+            GregorianCalendar refDate = new GregorianCalendar(year, month, 1, _sendHour, 0, 0);
 
             boolean isSend = true;
-            if (_sendHour == Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
+            if (day == 1 && _sendHour == Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
                 if (_lastSentDate != null) {
                     if (_lastSentDate.after(refDate)) {
                         isSend = false;
@@ -57,9 +57,8 @@ public class MailWorker extends Worker {
             } else {
                 if (_lastSentDate != null) {
                     GregorianCalendar dayCal = _lastSentDate;
-                    dayCal.add(Calendar.DATE, 1);
 
-                    if (dayCal.after(new GregorianCalendar())) {
+                    if (dayCal.after(refDate)) {
                         isSend = false;
                     }
                 }

@@ -46,7 +46,7 @@ public class CaddyItemList extends AppCompatActivity {
     String fullExportPath;
     Context context = this;
     private ProgressDialog mProgressDialog;
-    private boolean _isLastMonthOnly = true;
+    private boolean _isLastMonthOnly = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

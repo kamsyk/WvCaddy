@@ -150,7 +150,7 @@ public class ItemListExport {
                 "rowid DESC");
     }
 
-    private Cursor getVwCaddySubcodeCursor(boolean isLastMonthOnly) {
+    private Cursor getVwCaddySubcodeCursor(boolean isLastMonthOnly, String[] month, int[] year) {
 
         SQLiteDatabase db = _dbHelper.getReadableDatabase();
 
@@ -168,6 +168,11 @@ public class ItemListExport {
             long intEnd = endDate.getTime().getTime();
 
             strFilter = LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + ">" + intStart + " AND " + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + "<" + intEnd;
+
+            year[0] = startDate.get(Calendar.YEAR);
+            SimpleDateFormat month_date = new SimpleDateFormat("MMMM");
+            String monthName = month_date.format(startDate.getTime());
+            month[0] = monthName;
         }
 
         return db.query(
@@ -316,7 +321,9 @@ public class ItemListExport {
                         + System.lineSeparator();
                 myOutSummaryWriter.append(strSummaryHeader);
 
-                Cursor cursorSummary = getVwCaddySubcodeCursor(isLastMonthOnly);
+                int[] year = new int[1];
+                String[] monthName = new String[1];
+                Cursor cursorSummary = getVwCaddySubcodeCursor(isLastMonthOnly, monthName, year);
                 iRowIndex = 0;
 
                 Map<String, Integer> mapSummary = new HashMap<String, Integer>();
@@ -359,6 +366,12 @@ public class ItemListExport {
                 myOutSummaryWriter.append("020 2-4531," + mapSummary.get("020 2-4531") + System.lineSeparator());
                 myOutSummaryWriter.append("820 8-0263," + mapSummary.get("820 8-0263") + System.lineSeparator());
                 myOutSummaryWriter.append("810 2-4537A," + mapSummary.get("810 2-4537A") + System.lineSeparator());
+
+                if(isLastMonthOnly && year[0] != 0 && monthName[0] != null) {
+                    myOutSummaryWriter.append(System.lineSeparator());
+                    myOutSummaryWriter.append("Měsíc," + monthName[0] + System.lineSeparator());
+                    myOutSummaryWriter.append("Rok," + year[0] + System.lineSeparator());
+                }
 
                 myOutSummaryWriter.close();
                 fOutSummary.close();
