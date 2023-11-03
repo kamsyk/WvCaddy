@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.io.IOException;
+import java.util.GregorianCalendar;
 
 public class ItemListMailer {
     private Context _context = null;
@@ -18,17 +19,23 @@ public class ItemListMailer {
     private LinearProgressIndicator _progressBar = null;
     private ProgressDialog _progressDialog;
     private boolean _isResultOk = false;
-    private boolean _isLastMonthOnly = true;
+    //private boolean _isLastMonthOnly = true;
+    GregorianCalendar _startDate;
+    GregorianCalendar _endDate;
 
     public ItemListMailer(
             Context context,
             boolean isAuto,
-            boolean isLastMonthOnly,
+            //boolean isLastMonthOnly,
+            GregorianCalendar startDate,
+            GregorianCalendar endDate,
             LinearProgressIndicator progressBar) {
         _context = context;
         _isAuto = isAuto;
+        _startDate = startDate;
+        _endDate = endDate;
         _progressBar = progressBar;
-        _isLastMonthOnly = isLastMonthOnly;
+        //_isLastMonthOnly = isLastMonthOnly;
     }
 
     public void sendMail() throws Exception {
@@ -39,8 +46,8 @@ public class ItemListMailer {
                     _progressBar);
             if (itemListExport.isExportFolderExist()) {
                 if(_isAuto) {
-                    ItemListExport.ExportAsyncTask exportAsyncTask = itemListExport.new ExportAsyncTask(_isLastMonthOnly);
-                    exportAsyncTask.exportThread(_isLastMonthOnly);
+                    ItemListExport.ExportAsyncTask exportAsyncTask = itemListExport.new ExportAsyncTask(_startDate, _endDate);
+                    exportAsyncTask.exportThread(_startDate, _endDate);
                     new GMailApi(_context).sendGMail(itemListExport.getFullExportPath(), itemListExport.getFullSummaryExportPath());
                 } else {
                     new ItemListMailer.SendMailAsyncTask().execute();
@@ -66,6 +73,7 @@ public class ItemListMailer {
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
             }
+            new ErrorHandler().LogError(_context, e);
         }
     }
 
@@ -79,20 +87,20 @@ public class ItemListMailer {
                         _progressBar);
 
                 //ItemListExport.ExportAsyncTask().exportThread();
-                ItemListExport.ExportAsyncTask exportAsyncTask = itemListExport.new ExportAsyncTask(_isLastMonthOnly);
-                exportAsyncTask.exportThread(_isLastMonthOnly);
+                ItemListExport.ExportAsyncTask exportAsyncTask = itemListExport.new ExportAsyncTask(_startDate, _endDate);
+                exportAsyncTask.exportThread(_startDate, _endDate);
 
                 //Send GMail
                 new GMailApi(_context).sendGMail(itemListExport.getFullExportPath(), itemListExport.getFullSummaryExportPath());
 
                 return null;
             } catch (IOException | InterruptedException e) {
-
-                    return "Generování dokumentu selhalo";
+                new ErrorHandler() .LogError(_context, e);
+                return "Generování dokumentu selhalo";
 
             } catch (Exception e) {
-
-                    return "Odesílání dokumentu selhalo";
+                new ErrorHandler() .LogError(_context, e);
+                return "Odesílání dokumentu selhalo";
 
             }
         }

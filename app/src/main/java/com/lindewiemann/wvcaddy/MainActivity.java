@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         if(txtPcs.getText().toString().length() > 0) {
             _iPcs = Integer.parseInt(txtPcs.getText().toString());
         }
-        if(_iPcs == -1) {
+        if(_iPcs < 1) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setTitle("Upozornění");
             builder1.setMessage("Zadejte počet kusů");
@@ -634,10 +634,7 @@ public class MainActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 _failReason = (FailReason) parent.getSelectedItem();
-                //iFailCode = Integer.parseInt(failReason.getId());
-                //Toast.makeText(context, "Country ID: "+country.getId()+",  Country Name : "+country.getName(), Toast.LENGTH_SHORT).show();
             }
 
             @Override

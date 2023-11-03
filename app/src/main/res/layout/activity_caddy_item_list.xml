@@ -107,14 +107,32 @@
                 android:orientation="horizontal">
 
                 <CheckBox
-                    android:id="@+id/ckbLastMonthOnly"
+                    android:id="@+id/ckbAll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
-                    android:text="Pouze data za minulý měsíc"
-                    android:onClick="ckbOnlyMonth">
+                    android:text="Všechna data"
+                    android:onClick="ckbAll">
                 </CheckBox>
 
+                <Spinner
+                    android:id="@+id/spinMonth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_border"
+                    android:padding="2dp"
+                    android:textColor="#000"
+                    android:layout_marginLeft="10dp"
+                    />
+
+                <Spinner
+                    android:id="@+id/spinYear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_border"
+                    android:padding="2dp"
+                    android:textColor="#000"
+                    />
             </LinearLayout>
 
             <LinearLayout

@@ -17,8 +17,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -34,9 +37,11 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 public class CaddyItemList extends AppCompatActivity {
@@ -46,7 +51,11 @@ public class CaddyItemList extends AppCompatActivity {
     String fullExportPath;
     Context context = this;
     private ProgressDialog mProgressDialog;
-    private boolean _isLastMonthOnly = false;
+    private boolean _isAllData = false;
+    private Month _month;
+    private Year _year;
+    GregorianCalendar _startDate = null;
+    GregorianCalendar _endDate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +75,8 @@ public class CaddyItemList extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_caddy_item_list);
+        setMonths();
+        setYears();
         loadItems();
     }
 
@@ -75,6 +86,20 @@ public class CaddyItemList extends AppCompatActivity {
     }
 
     private void loadItems() {
+        if(!_isAllData) {
+            try {
+                _startDate = new GregorianCalendar();
+                _endDate = new GregorianCalendar();
+                int startMonth = _month.getId();
+                int startYear = _year.getId();
+                _startDate.set(startYear, startMonth - 1, 1, 0, 0);
+                _endDate.set(_startDate.get(Calendar.YEAR), _startDate.get(Calendar.MONTH), 1, 0, 0);
+                _endDate.add(Calendar.MONTH, 1);
+            } catch(Exception ex) {
+                throw ex;
+            }
+        }
+
         Cursor cursor = getVwCaddyCursor();
 
         ListView lvItems = findViewById(R.id.lvItems);
@@ -91,17 +116,17 @@ public class CaddyItemList extends AppCompatActivity {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
         String strFilter = null;
-        if(_isLastMonthOnly) {
-            GregorianCalendar startDate = new GregorianCalendar();
-            startDate.add(Calendar.MONTH, -1);
-            startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
+        if(_startDate != null && _endDate != null) {
+            //GregorianCalendar startDate = new GregorianCalendar();
+            //startDate.add(Calendar.MONTH, -1);
+            //startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
 
-            GregorianCalendar endDate = new GregorianCalendar();
+            /*GregorianCalendar endDate = new GregorianCalendar();
             endDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
-            endDate.add(Calendar.MONTH, 1);
+            endDate.add(Calendar.MONTH, 1);*/
 
-            long intStart = startDate.getTime().getTime();
-            long intEnd = endDate.getTime().getTime();
+            long intStart = _startDate.getTime().getTime();
+            long intEnd = _endDate.getTime().getTime();
 
             strFilter = LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + ">" + intStart + " AND " + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + "<" + intEnd;
         }
@@ -126,7 +151,7 @@ public class CaddyItemList extends AppCompatActivity {
             new ItemListExport(
                     v.getContext(),
                     false,
-                    progressBar).exportToFile(_isLastMonthOnly);
+                    progressBar).exportToFile(_startDate, _endDate);
         } catch(Exception ex) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
             builder1.setTitle("Došlo k chybě");
@@ -150,7 +175,8 @@ public class CaddyItemList extends AppCompatActivity {
                 new ItemListMailer(
                         v.getContext(),
                         false,
-                        _isLastMonthOnly,
+                        _startDate,
+                        _endDate,
                         progressBar).sendMail();
 
             }
@@ -166,12 +192,114 @@ public class CaddyItemList extends AppCompatActivity {
 
             AlertDialog alert11 = builder1.create();
             alert11.show();
+            new ErrorHandler().LogError(context, e);
         }
     }
 
-    public void ckbOnlyMonth(View v) {
-        CheckBox ckbMonthOnly = (CheckBox)v;
-        _isLastMonthOnly = (ckbMonthOnly.isChecked());
+    public void ckbAll(View v) {
+        CheckBox ckbAll = (CheckBox)v;
+
+        final Spinner spinnerMonth = (Spinner) findViewById(R.id.spinMonth);
+        final Spinner spinnerYear = (Spinner) findViewById(R.id.spinYear);
+        spinnerMonth.setEnabled(!ckbAll.isChecked());
+        spinnerYear.setEnabled(!ckbAll.isChecked());
+
+        _isAllData = (ckbAll.isChecked());
+        if(ckbAll.isChecked()) {
+            _startDate = null;
+            _endDate = null;
+        }
         loadItems();
+    }
+
+    private void setMonths() {
+        List<Month> monthsList = new ArrayList<Month>();
+
+        monthsList.add(new Month(1,"Leden"));
+        monthsList.add(new Month(2, "Únor"));
+        monthsList.add(new Month(3,"Březen"));
+        monthsList.add(new Month(4,"Duben"));
+        monthsList.add(new Month(5,"Květen"));
+        monthsList.add(new Month(6,"Červen"));
+        monthsList.add(new Month(7,"Červenec"));
+        monthsList.add(new Month(8,"Srpen"));
+        monthsList.add(new Month(9,"Září"));
+        monthsList.add(new Month(10,"Říjen"));
+        monthsList.add(new Month(11,"Listopad"));
+        monthsList.add(new Month(12,"Prosinec"));
+
+        GregorianCalendar nowDate = new GregorianCalendar();
+        int iMonth = nowDate.get(Calendar.MONTH);
+        for(Month m: monthsList) {
+            if(m.getId() == (iMonth + 1)) {
+                _month = m;
+                break;
+            }
+        }
+
+        // Creating adapter for spinner
+        ArrayAdapter<Month> dataAdapter = new ArrayAdapter<Month>(this, android.R.layout.simple_spinner_item, monthsList);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        final Spinner spinner = (Spinner) findViewById(R.id.spinMonth);
+        spinner.setAdapter(dataAdapter);
+        spinner.setSelection(dataAdapter.getPosition(_month));
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                _month = (Month) parent.getSelectedItem();
+                loadItems();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+    private void setYears() {
+        List<Year> yearsList = new ArrayList<Year>();
+
+        GregorianCalendar nowDate = new GregorianCalendar();
+        int iYear = nowDate.get(Calendar.YEAR);
+
+        for(int i=2023; i<=iYear; i++) {
+            yearsList.add(new Year(i, String.valueOf(i)));
+        }
+
+
+        for(Year y: yearsList) {
+            if(y.getId() == iYear) {
+                _year = y;
+                break;
+            }
+        }
+
+        // Creating adapter for spinner
+        ArrayAdapter<Year> dataAdapter = new ArrayAdapter<Year>(this, android.R.layout.simple_spinner_item, yearsList);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        final Spinner spinner = (Spinner) findViewById(R.id.spinYear);
+        spinner.setAdapter(dataAdapter);
+        spinner.setSelection(dataAdapter.getPosition(_year));
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                _year = (Year) parent.getSelectedItem();
+                loadItems();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 }

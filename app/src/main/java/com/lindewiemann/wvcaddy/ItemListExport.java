@@ -58,13 +58,13 @@ public class ItemListExport {
 
     }
 
-    public void exportToFile(boolean isLastMonthOnly) {
+    public void exportToFile(GregorianCalendar startDate, GregorianCalendar endDate) {
         try {
             if (isExportFolderExist()) {
                 if(_progressBar != null) {
                     _progressBar.setVisibility(View.VISIBLE);
                 }
-                new ItemListExport.ExportAsyncTask(isLastMonthOnly).execute();
+                new ItemListExport.ExportAsyncTask(startDate, endDate).execute();
             }
 
 
@@ -120,19 +120,19 @@ public class ItemListExport {
         return context.getExternalFilesDir(null);
     }
 
-    private Cursor getVwCaddyCursor(boolean isLastMonthOnly) {
+    private Cursor getVwCaddyCursor(GregorianCalendar startDate, GregorianCalendar endDate) {
 
         SQLiteDatabase db = _dbHelper.getReadableDatabase();
 
         String strFilter = null;
-        if(isLastMonthOnly) {
-            GregorianCalendar startDate = new GregorianCalendar();
+        if(startDate != null && endDate != null) {
+            /*GregorianCalendar startDate = new GregorianCalendar();
             startDate.add(Calendar.MONTH, -1);
             startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
 
             GregorianCalendar endDate = new GregorianCalendar();
             endDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
-            endDate.add(Calendar.MONTH, 1);
+            endDate.add(Calendar.MONTH, 1);*/
 
             long intStart = startDate.getTime().getTime();
             long intEnd = endDate.getTime().getTime();
@@ -150,29 +150,29 @@ public class ItemListExport {
                 "rowid DESC");
     }
 
-    private Cursor getVwCaddySubcodeCursor(boolean isLastMonthOnly, String[] month, int[] year) {
+    private Cursor getVwCaddySubcodeCursor(GregorianCalendar startDate, GregorianCalendar endDate) {
 
         SQLiteDatabase db = _dbHelper.getReadableDatabase();
 
         String strFilter = null;
-        if(isLastMonthOnly) {
-            GregorianCalendar startDate = new GregorianCalendar();
+        if(startDate != null && endDate != null) {
+            /*GregorianCalendar startDate = new GregorianCalendar();
             startDate.add(Calendar.MONTH, -1);
             startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
 
             GregorianCalendar endDate = new GregorianCalendar();
             endDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
-            endDate.add(Calendar.MONTH, 1);
+            endDate.add(Calendar.MONTH, 1);*/
 
             long intStart = startDate.getTime().getTime();
             long intEnd = endDate.getTime().getTime();
 
             strFilter = LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + ">" + intStart + " AND " + LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_DATE_INT + "<" + intEnd;
 
-            year[0] = startDate.get(Calendar.YEAR);
+            /*year[0] = startDate.get(Calendar.YEAR);
             SimpleDateFormat month_date = new SimpleDateFormat("MMMM");
             String monthName = month_date.format(startDate.getTime());
-            month[0] = monthName;
+            month[0] = monthName;*/
         }
 
         return db.query(
@@ -188,17 +188,23 @@ public class ItemListExport {
     public class ExportAsyncTask extends AsyncTask<Void, Integer, Boolean> {
         String fileName = null;
         String fileSummaryName = null;
-        boolean _isLastMonthOnly = true;
+        GregorianCalendar _startDate = null;
+        GregorianCalendar _endDate = null;
 
-        public ExportAsyncTask(boolean isLastMonthOnly) {
+        public ExportAsyncTask(GregorianCalendar startDate, GregorianCalendar endDate) {
             super();
-            _isLastMonthOnly = isLastMonthOnly;
+            _startDate = startDate;
+            _endDate = endDate;
+            /*_startDate.add(Calendar.MONTH, -1);
+            _startDate.set(_startDate.get(Calendar.YEAR), _startDate.get(Calendar.MONTH), 1, 0, 0);
+            _endDate.set(_startDate.get(Calendar.YEAR), _startDate.get(Calendar.MONTH), 1, 0, 0);
+            _endDate.add(Calendar.MONTH, 1);*/
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                exportThread(_isLastMonthOnly);
+                exportThread(_startDate, _endDate);
                 return true;
             } catch (IOException | InterruptedException e) {
                 return false;
@@ -261,7 +267,7 @@ public class ItemListExport {
             }
         }
 
-        public void exportThread(boolean isLastMonthOnly) throws IOException, InterruptedException {
+        public void exportThread(GregorianCalendar startDate, GregorianCalendar endDate) throws IOException, InterruptedException {
 
             try {
                 Date date = new Date();
@@ -283,11 +289,12 @@ public class ItemListExport {
                 String strHeader = "Datum,"
                         + "Směna,"
                         + "Podsestava,"
+                        + "Počet,"
                         + "Chyba"
                         + System.lineSeparator();
                 myOutWriter.append(strHeader);
 
-                Cursor cursor = getVwCaddyCursor(isLastMonthOnly);
+                Cursor cursor = getVwCaddyCursor(startDate, endDate);
                 int iRowIndex = 0;
 
                 while (cursor.moveToNext()) {
@@ -321,9 +328,11 @@ public class ItemListExport {
                         + System.lineSeparator();
                 myOutSummaryWriter.append(strSummaryHeader);
 
-                int[] year = new int[1];
-                String[] monthName = new String[1];
-                Cursor cursorSummary = getVwCaddySubcodeCursor(isLastMonthOnly, monthName, year);
+                int year = startDate.get(Calendar.YEAR);
+                SimpleDateFormat month_date = new SimpleDateFormat("MMMM");
+                String monthName = month_date.format(startDate.getTime());
+                String month = monthName;
+                Cursor cursorSummary = getVwCaddySubcodeCursor(startDate, endDate);
                 iRowIndex = 0;
 
                 Map<String, Integer> mapSummary = new HashMap<String, Integer>();
@@ -367,10 +376,10 @@ public class ItemListExport {
                 myOutSummaryWriter.append("820 8-0263," + mapSummary.get("820 8-0263") + System.lineSeparator());
                 myOutSummaryWriter.append("810 2-4537A," + mapSummary.get("810 2-4537A") + System.lineSeparator());
 
-                if(isLastMonthOnly && year[0] != 0 && monthName[0] != null) {
+                if(startDate != null && endDate != null && year != 0 && monthName != null) {
                     myOutSummaryWriter.append(System.lineSeparator());
-                    myOutSummaryWriter.append("Měsíc," + monthName[0] + System.lineSeparator());
-                    myOutSummaryWriter.append("Rok," + year[0] + System.lineSeparator());
+                    myOutSummaryWriter.append("Měsíc," + monthName + System.lineSeparator());
+                    myOutSummaryWriter.append("Rok," + year + System.lineSeparator());
                 }
 
                 myOutSummaryWriter.close();
@@ -396,10 +405,12 @@ public class ItemListExport {
             String strLr = LwVwCaddyDbDict.getLeftRightText(iLr);
             String strPcs = String.valueOf(iPcs);
             String strReason = VwCaddyItemsAdapter.getFailReason(iFailReason);
+            strCode += " " + strLr;
 
             String exportLine = strDateTime + ","
                     + strShift + ","
                     + strCode + ","
+                    + strPcs + ","
                     + strReason;
             exportLine += System.lineSeparator();
 

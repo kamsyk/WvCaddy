@@ -65,16 +65,27 @@ public class MailWorker extends Worker {
             }
 
             if (isSend) {
+                GregorianCalendar startDate = new GregorianCalendar();
+                startDate.add(Calendar.MONTH, -1);
+                startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
+
+                GregorianCalendar endDate = new GregorianCalendar();
+                endDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
+                endDate.add(Calendar.MONTH, 1);
+
+
                 try {
                     new ItemListMailer(
                             getApplicationContext(),
                             true,
-                            true,
+                            startDate,
+                            endDate,
                             null
                     ).sendMail();
                     setCheckStamp();
                 } catch (Exception e) {
                     setMailStatus(e.getMessage());
+                    new ErrorHandler().LogError(getApplicationContext(), e);
                     return Result.failure();
                 }
 
@@ -83,6 +94,7 @@ public class MailWorker extends Worker {
 
         } catch(Exception e) {
             setMailStatus(e.getMessage());
+            new ErrorHandler().LogError(getApplicationContext(), e);
         }
         return Result.success();
     }

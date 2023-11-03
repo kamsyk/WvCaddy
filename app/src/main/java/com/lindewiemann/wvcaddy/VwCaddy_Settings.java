@@ -2,17 +2,21 @@ package com.lindewiemann.wvcaddy;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+import androidx.work.WorkerParameters;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -24,9 +28,14 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class VwCaddy_Settings extends AppCompatActivity {
@@ -36,6 +45,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
     boolean _isAuthorized = false;
     String _pwd = null;
     private int _origHour = 0;
+    private Context _context = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +105,8 @@ public class VwCaddy_Settings extends AppCompatActivity {
         final Spinner spinner = (Spinner) findViewById(R.id.spinHour);
         spinner.setAdapter(dataAdapter);
         spinner.setSelection(iHour);
+
+        _context = getApplicationContext();
     }
 
     public void login(View view) {
@@ -312,7 +324,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
         } catch(Exception ex) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(getApplicationContext());
             builder1.setTitle("Nastavení nebylo uloženo");
-            builder1.setMessage("Při ukládání došo k chybě");
+            builder1.setMessage("Při ukládání došlo k chybě");
             builder1.setCancelable(true);
             builder1.setNeutralButton("Zavřít",
                     (DialogInterface dialog, int id) ->
@@ -321,6 +333,39 @@ public class VwCaddy_Settings extends AppCompatActivity {
 
             AlertDialog alert11 = builder1.create();
             alert11.show();
+        }
+    }
+
+    public void send(View view) {
+        try {
+            GregorianCalendar startDate = new GregorianCalendar();
+            startDate.add(Calendar.MONTH, -1);
+            startDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
+
+            GregorianCalendar endDate = new GregorianCalendar();
+            endDate.set(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), 1, 0, 0);
+            endDate.add(Calendar.MONTH, 1);
+
+            new ItemListMailer(
+                    view.getContext(),
+                    false,
+                    startDate,
+                    endDate,
+                    null).sendMail();
+
+        } catch (Exception e) {
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(_context);
+            builder1.setTitle("Došlo k chybě");
+            builder1.setMessage("Odeslání mailu selhalo");
+            builder1.setCancelable(true);
+            builder1.setNeutralButton("Zavřít",
+                    (DialogInterface dialog, int id) ->
+                            dialog.cancel()
+            );
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
+            new ErrorHandler().LogError(_context, e);
         }
     }
 
@@ -409,4 +454,6 @@ public class VwCaddy_Settings extends AppCompatActivity {
                 AlarmManager.INTERVAL_DAY, pi);*/
 
     }
+
+
 }
