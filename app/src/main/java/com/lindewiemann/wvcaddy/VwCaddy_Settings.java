@@ -9,7 +9,9 @@ import androidx.work.WorkerParameters;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,14 +20,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
@@ -46,6 +51,15 @@ public class VwCaddy_Settings extends AppCompatActivity {
     String _pwd = null;
     private int _origHour = 0;
     private Context _context = null;
+    DatePickerDialog datePicker;
+    TimePickerDialog timePicker;
+    EditText txtManualDate;
+    EditText txtManualTime;
+    int day;
+    int month;
+    int year;
+    int hour;
+    int minutes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +73,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
     private void init() {
         Cursor cursor = getVwCaddyCursor();
         int iHour = 0;
+        int iHourManual = 0;
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             ((EditText) findViewById(R.id.txtSender)).setText(cursor.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_SENDER)));
@@ -107,6 +122,48 @@ public class VwCaddy_Settings extends AppCompatActivity {
         spinner.setSelection(iHour);
 
         _context = getApplicationContext();
+
+        txtManualDate=(EditText) findViewById(R.id.editTextManualDate);
+        txtManualDate.setInputType(InputType.TYPE_NULL);
+        txtManualDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar cldr = Calendar.getInstance();
+                day = cldr.get(Calendar.DAY_OF_MONTH);
+                month = cldr.get(Calendar.MONTH);
+                year = cldr.get(Calendar.YEAR);
+                // date picker dialog
+                datePicker = new DatePickerDialog(VwCaddy_Settings.this,
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                txtManualDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year);
+                            }
+                        }, year, month, day);
+                datePicker.show();
+            }
+        });
+
+        txtManualTime=(EditText) findViewById(R.id.editTextManualTime);
+        txtManualTime.setInputType(InputType.TYPE_NULL);
+        txtManualTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar cldr = Calendar.getInstance();
+                hour = cldr.get(Calendar.HOUR_OF_DAY);
+                minutes = cldr.get(Calendar.MINUTE);
+                // time picker dialog
+                timePicker = new TimePickerDialog(VwCaddy_Settings.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
+                                txtManualTime.setText(sHour + ":" + sMinute);
+                            }
+                        }, hour, minutes, true);
+                timePicker.show();
+            }
+        });
+
     }
 
     public void login(View view) {
@@ -261,6 +318,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
             String strGMailAppPwd = ((EditText) findViewById(R.id.txtGMailAppPwd)).getText().toString();
             final Spinner spinner = (Spinner) findViewById(R.id.spinHour);
             int iHour = spinner.getSelectedItemPosition();
+            String strManualMailDate = null;
 
             Cursor cursor = getVwCaddyCursor();
             if (cursor.getCount() == 0) {
@@ -274,6 +332,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
                 //values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY, strMailjetSecretKey);
                 values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAILJET_SECRET_KEY, strGMailAppPwd);
                 values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR, iHour);
+                values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_MANUAL_MAIL_DATE, strManualMailDate);
 
                 // Insert the new row, returning the primary key value of the new row
                 long newRowId = db.insert(LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, null, values);
@@ -293,6 +352,7 @@ public class VwCaddy_Settings extends AppCompatActivity {
                 if(iHour != _origHour) {
                     values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE, strDateNull);
                 }
+                values.put(LwVwCaddyDbDict.WvCaddySettings.COLUMN_MANUAL_MAIL_DATE, strManualMailDate);
 
                 // on below line we are calling a update method to update our database and passing our values.
                 // and we are comparing it with name of our course which is stored in original name variable.

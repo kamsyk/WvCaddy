@@ -48,7 +48,8 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_GMAILPASSWORD  + " TEXT,"
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_HOUR + " INTEGER,"
                     + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_MAIL_DATE + " TEXT,"
-                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_AUTO_MAIL_STATUS + " TEXT"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_NAME_AUTO_MAIL_STATUS + " TEXT,"
+                    + LwVwCaddyDbDict.WvCaddySettings.COLUMN_MANUAL_MAIL_DATE + " TEXT"
                     + ")";
 
     public ContainerDbHelper(Context context) {
@@ -129,6 +130,14 @@ public class ContainerDbHelper extends SQLiteOpenHelper {
             db.execSQL(sql);
         }
         //}*/
+        if(DATABASE_VERSION < 3) {
+            if(!IsExistsColumnInTable(db, LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME, LwVwCaddyDbDict.WvCaddySettings.COLUMN_MANUAL_MAIL_DATE)) {
+                String sql = "ALTER TABLE " + LwVwCaddyDbDict.WvCaddySettings.TABLE_NAME +
+                        "  ADD " + LwVwCaddyDbDict.WvCaddySettings.COLUMN_MANUAL_MAIL_DATE + " TEXT";
+
+                db.execSQL(sql);
+            }
+        }
     }
 
     private boolean IsExistsColumnInTable(SQLiteDatabase lwVwDb, String lwWvTable, String columnToCheck) {

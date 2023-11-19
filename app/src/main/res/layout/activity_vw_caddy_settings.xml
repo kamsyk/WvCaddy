@@ -361,18 +361,56 @@
                 android:layout_marginTop="10dp"
                 android:textColor="#000"/>
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+                    <Spinner
+                        android:id="@+id/spinHour"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/edittext_border"
+                        android:padding="2dp"
+                        android:textColor="#000"
+                        />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Datum a čas odeslání (mimo pravidelného desílání)"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white">
-                <Spinner
-                    android:id="@+id/spinHour"
-                    android:layout_width="match_parent"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/edittext_border"
-                    android:padding="2dp"
-                    android:textColor="#000"
-                    />
+                    android:background="@color/white">
+                    <EditText
+                        android:id="@+id/editTextManualDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Datum"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white">
+                    <EditText
+                        android:id="@+id/editTextManualTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Čas" />
+                </LinearLayout>
             </LinearLayout>
 
             <TextView

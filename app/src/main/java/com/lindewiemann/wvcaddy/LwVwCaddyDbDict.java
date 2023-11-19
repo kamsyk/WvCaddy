@@ -50,6 +50,7 @@ public final class LwVwCaddyDbDict {
         public static final String COLUMN_NAME_HOUR = "mail_hour";
         public static final String COLUMN_NAME_MAIL_DATE = "mail_sent_date";
         public static final String COLUMN_NAME_AUTO_MAIL_STATUS = "auto_mail_status";
+        public static final String COLUMN_MANUAL_MAIL_DATE = "manual_mail_date";
     }
 
     public static String getShiftName(int iShift) {
