@@ -336,18 +336,18 @@ public class ItemListExport {
                 iRowIndex = 0;
 
                 Map<String, Integer> mapSummary = new HashMap<String, Integer>();
-                mapSummary.put("810 2-4536B", 0);
-                mapSummary.put("020 2-4530", 0);
-                mapSummary.put("820 8-0398A", 0);
-                mapSummary.put("020 2-4532", 0);
-                mapSummary.put("820 8-0343", 0);
-                mapSummary.put("81024534A", 0);
-                mapSummary.put("810 2-4535", 0);
-                mapSummary.put("020 2-4529", 0);
-                mapSummary.put("810 2-4533A", 0);
-                mapSummary.put("020 2-4531", 0);
-                mapSummary.put("820 8-0263", 0);
-                mapSummary.put("810 2-4537A", 0);
+                mapSummary.put("10004650", 0);
+                mapSummary.put("10004761", 0);
+                mapSummary.put("20003314", 0);
+                mapSummary.put("10004763", 0);
+                mapSummary.put("20003302", 0);
+                mapSummary.put("10004648", 0);
+                mapSummary.put("10004649", 0);
+                mapSummary.put("10004760", 0);
+                mapSummary.put("10004647", 0);
+                mapSummary.put("10004762", 0);
+                mapSummary.put("20003261", 0);
+                mapSummary.put("10004651", 0);
 
                 while (cursorSummary.moveToNext()) {
                     String strSubCode = cursorSummary.getString(cursor.getColumnIndexOrThrow(LwVwCaddyDbDict.WvCaddyEntry.COLUMN_NAME_SUBCODE));
@@ -363,18 +363,18 @@ public class ItemListExport {
                     }
                 }
 
-                myOutSummaryWriter.append("810 2-4536B," + mapSummary.get("810 2-4536B") + System.lineSeparator());
-                myOutSummaryWriter.append("020 2-4530," + mapSummary.get("020 2-4530") + System.lineSeparator());
-                myOutSummaryWriter.append("820 8-0398A," + mapSummary.get("820 8-0398A") + System.lineSeparator());
-                myOutSummaryWriter.append("020 2-4532," + mapSummary.get("020 2-4532") + System.lineSeparator());
-                myOutSummaryWriter.append("820 8-0343," + mapSummary.get("820 8-0343") + System.lineSeparator());
-                myOutSummaryWriter.append("81024534A," + mapSummary.get("81024534A") + System.lineSeparator());
-                myOutSummaryWriter.append("810 2-4535," + mapSummary.get("810 2-4535") + System.lineSeparator());
-                myOutSummaryWriter.append("020 2-4529," + mapSummary.get("020 2-4529") + System.lineSeparator());
-                myOutSummaryWriter.append("810 2-4533A," + mapSummary.get("810 2-4533A") + System.lineSeparator());
-                myOutSummaryWriter.append("020 2-4531," + mapSummary.get("020 2-4531") + System.lineSeparator());
-                myOutSummaryWriter.append("820 8-0263," + mapSummary.get("820 8-0263") + System.lineSeparator());
-                myOutSummaryWriter.append("810 2-4537A," + mapSummary.get("810 2-4537A") + System.lineSeparator());
+                myOutSummaryWriter.append("10004650," + mapSummary.get("10004650") + System.lineSeparator());
+                myOutSummaryWriter.append("10004761," + mapSummary.get("10004761") + System.lineSeparator());
+                myOutSummaryWriter.append("20003314," + mapSummary.get("20003314") + System.lineSeparator());
+                myOutSummaryWriter.append("10004763," + mapSummary.get("10004763") + System.lineSeparator());
+                myOutSummaryWriter.append("20003302," + mapSummary.get("20003302") + System.lineSeparator());
+                myOutSummaryWriter.append("10004648," + mapSummary.get("10004648") + System.lineSeparator());
+                myOutSummaryWriter.append("10004649," + mapSummary.get("10004649") + System.lineSeparator());
+                myOutSummaryWriter.append("10004760," + mapSummary.get("10004760") + System.lineSeparator());
+                myOutSummaryWriter.append("10004647," + mapSummary.get("10004647") + System.lineSeparator());
+                myOutSummaryWriter.append("10004762," + mapSummary.get("10004762") + System.lineSeparator());
+                myOutSummaryWriter.append("20003261," + mapSummary.get("20003261") + System.lineSeparator());
+                myOutSummaryWriter.append("10004651," + mapSummary.get("10004651") + System.lineSeparator());
 
                 if(startDate != null && endDate != null && year != 0 && monthName != null) {
                     myOutSummaryWriter.append(System.lineSeparator());

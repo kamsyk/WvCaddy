@@ -478,49 +478,49 @@ public class MainActivity extends AppCompatActivity {
         switch(_btnPicId) {
             case R.id.btnUzsb1l:
                 _strCode = "UZSB 1";
-                _strSubcode = "810 2-4535;020 2-4529";
+                _strSubcode = "10004649;10004760";
                 _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb1l, lls);
                 break;
             case R.id.btnUzsb2l:
                 _strCode = "UZSB 2";
-                _strSubcode ="810 2-4535;020 2-4529;810 2-4533A";
+                _strSubcode ="10004649;10004760;10004647";
                 _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb2l, lls);
                 break;
             case R.id.btnUzsb3l:
                 _strCode = "UZSB 3";
-                _strSubcode ="810 2-4535;020 2-4529;810 2-4533A;020 2-4531;820 8-0263";
+                _strSubcode ="10004649;10004760;10004647;10004762;20003261";
                 _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb3l, lls);
                 break;
             case R.id.btnUzsb4l:
                 _strCode = "UZSB 4";
-                _strSubcode = "810 2-4535;020 2-4529;810 2-4533A;020 2-4531;820 8-0263;810 2-4537A";
+                _strSubcode = "10004649;10004760;10004647;10004762;20003261;10004651";
                 _iLeftRight = LwVwCaddyDbDict.CODE_LEFT;
                 hideLls(R.id.llUzsb4l, lls);
                 break;
             case R.id.btnUzsb1r:
                 _strCode = "UZSB 1";
-                _strSubcode = "810 2-4536B;020 2-4530";
+                _strSubcode = "10004650;10004761";
                 _iLeftRight = LwVwCaddyDbDict.CODE_RIGHT;
                 hideLls(R.id.llUzsb1r, lls);
                 break;
             case R.id.btnUzsb2r:
                 _strCode = "UZSB 2";
-                _strSubcode = "810 2-4536B;020 2-4530;820 8-0398A";
+                _strSubcode = "10004650;10004761;20003314";
                 _iLeftRight = LwVwCaddyDbDict.CODE_RIGHT;
                 hideLls(R.id.llUzsb2r, lls);
                 break;
             case R.id.btnUzsb3r:
                 _strCode = "UZSB 3";
-                _strSubcode = "810 2-4536B;020 2-4530;820 8-0398A;020 2-4532;820 8-0343";
+                _strSubcode = "10004650;10004761;20003314;10004763;20003302";
                 _iLeftRight = LwVwCaddyDbDict.CODE_RIGHT;
                 hideLls(R.id.llUzsb3r, lls);
                 break;
             case R.id.btnUzsb4r:
                 _strCode = "UZSB 4";
-                _strSubcode = "810 2-4536B;020 2-4530;820 8-0398A;020 2-4532;820 8-0343;81024534A";
+                _strSubcode = "10004650;10004761;20003314;10004763;20003302;10004648";
                 _iLeftRight = LwVwCaddyDbDict.CODE_RIGHT;
                 hideLls(R.id.llUzsb4r, lls);
                 break;
